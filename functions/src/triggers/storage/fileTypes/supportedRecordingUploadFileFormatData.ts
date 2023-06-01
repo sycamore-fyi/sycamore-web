@@ -1,0 +1,98 @@
+export default [
+  {
+    "name": "MP4",
+    "extension": "mp4",
+    "contentType": "video/mp4",
+    "mediaType": "video",
+  },
+  {
+    "name": "QuickTime",
+    "extension": "mov",
+    "contentType": "video/quicktime",
+    "mediaType": "video",
+  },
+  {
+    "name": "AVI",
+    "extension": "avi",
+    "contentType": "video/x-msvideo",
+    "mediaType": "video",
+  },
+  {
+    "name": "FLV",
+    "extension": "flv",
+    "contentType": "video/x-flv",
+    "mediaType": "video",
+  },
+  {
+    "name": "WMV",
+    "extension": "wmv",
+    "contentType": "video/x-ms-wmv",
+    "mediaType": "video",
+  },
+  {
+    "name": "WebM",
+    "extension": "webm",
+    "contentType": "video/webm",
+    "mediaType": "video",
+  },
+  {
+    "name": "MPEG",
+    "extension": "mpeg",
+    "contentType": "video/mpeg",
+    "mediaType": "video",
+  },
+  {
+    "name": "MKV",
+    "extension": "mkv",
+    "contentType": "video/x-matroska",
+    "mediaType": "video",
+  },
+  {
+    "name": "MP3",
+    "extension": "mp3",
+    "contentType": "audio/mpeg",
+    "mediaType": "audio",
+  },
+  {
+    "name": "WAV",
+    "extension": "wav",
+    "contentType": "audio/wav",
+    "mediaType": "audio",
+  },
+  {
+    "name": "AAC",
+    "extension": "aac",
+    "contentType": "audio/aac",
+    "mediaType": "audio",
+  },
+  {
+    "name": "FLAC",
+    "extension": "flac",
+    "contentType": "audio/flac",
+    "mediaType": "audio",
+  },
+  {
+    "name": "OGG",
+    "extension": "ogg",
+    "contentType": "audio/ogg",
+    "mediaType": "audio",
+  },
+  {
+    "name": "Opus",
+    "extension": "opus",
+    "contentType": "audio/opus",
+    "mediaType": "audio",
+  },
+  {
+    "name": "AIFF",
+    "extension": "aiff",
+    "contentType": "audio/aiff",
+    "mediaType": "audio",
+  },
+  {
+    "name": "ALAC",
+    "extension": "m4a",
+    "contentType": "audio/mp4",
+    "mediaType": "audio",
+  },
+];

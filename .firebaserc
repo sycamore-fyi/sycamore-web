@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "sycamore-staging",
+    "prod": "sycamore-ce2fe",
+    "staging": "sycamore-staging"
+  },
+  "targets": {},
+  "etags": {}
+}
