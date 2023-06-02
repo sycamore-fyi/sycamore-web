@@ -15,9 +15,12 @@ import { handlePipelineTaskChange } from "./triggers/firestore/handlers/handlePi
 
 const user = functions.region("europe-west1").auth.user();
 
-setGlobalOptions({ region: "europe-west1" });
+setGlobalOptions({
+  region: "europe-west1",
+  maxInstances: 10,
+});
 
-export const onHttpRequest = onRequest({
+export const onExternalHttpRequest = onRequest({
   cors: true,
   secrets: [
     openaiCredentials.name,

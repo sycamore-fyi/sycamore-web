@@ -15,12 +15,16 @@ import { requestWebhookTrigger } from "../../../clients/beam/requestWebhookTrigg
 import { BeamAppId } from "../../../clients/beam/BeamAppId";
 import { beam } from "../../../clients/beam/beam";
 import { Environment, getEnvironment } from "../../../clients/firebase/Environment";
+import { config } from "../../../utils/Config";
+import axios from "axios";
 
 async function startPipelineTasks(remoteMp3FilePath: string, organisationId: string, recordingId: string) {
   let diarizationTaskId: string;
   let transcriptionTaskId: string;
 
-  if (getEnvironment() === Environment.PROD) {
+  const isProd = getEnvironment() === Environment.PROD;
+
+  if (isProd) {
     const beamClient = beam("api");
     [diarizationTaskId, transcriptionTaskId] = await Promise.all([
       requestWebhookTrigger(beamClient, BeamAppId.DIARIZATION, remoteMp3FilePath),
@@ -30,7 +34,6 @@ async function startPipelineTasks(remoteMp3FilePath: string, organisationId: str
     diarizationTaskId = "a6fc61b5-4798-4af5-b2fe-e2e6172787b6";
     transcriptionTaskId = "0219e883-81a1-4c65-bdbf-bf6becec751a";
   }
-
 
   const basePipelineTaskData = {
     createdAt: new Date(),
@@ -59,6 +62,19 @@ async function startPipelineTasks(remoteMp3FilePath: string, organisationId: str
       },
     }),
   ]);
+
+  if (!isProd) {
+    const callWebhook = async (taskId: string) => axios.post(`${config().SERVER_URL}/webhooks/beam`, {}, {
+      headers: {
+        "beam-task-id": taskId,
+      },
+    });
+
+    await Promise.all([
+      callWebhook(diarizationTaskId),
+      callWebhook(transcriptionTaskId),
+    ]);
+  }
 }
 
 async function updateDatabaseRecordingObject(localMp3FilePath: string, recordingId: string, processedFilePath: string) {
