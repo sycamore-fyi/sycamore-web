@@ -15,13 +15,13 @@ export function speakerSegmentsFromRttm(rttmContent: string): SpeakerSegment[] {
       // rttm lines are always in the same format
       const fields = rttmLine.split(" ");
       const startSeconds = fields[3];
-      const endSeconds = fields[3];
+      const durationSeconds = fields[4];
       const speakerLabel = fields[7];
       const speakerIndex = parseInt(speakerLabel.replace("SPEAKER_", ""), 10);
 
       return {
         startMs: parseMs(startSeconds),
-        endMs: parseMs(endSeconds),
+        endMs: parseMs(startSeconds) + parseMs(durationSeconds),
         speakerIndex,
       };
     });
