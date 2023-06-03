@@ -1,10 +1,5 @@
+import { Environment } from "@sycamore-fyi/shared";
 import { projectID } from "firebase-functions/params";
-
-export enum Environment {
-  PROD = "PROD",
-  STAGING = "STAGING",
-  LOCAL = "LOCAL",
-}
 
 export function getEnvironment(): Environment {
   if (process.env.FUNCTIONS_EMULATOR === "true") return Environment.LOCAL;

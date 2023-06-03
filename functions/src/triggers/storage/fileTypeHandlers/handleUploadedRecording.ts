@@ -14,9 +14,10 @@ import { PipelineTaskModel, PipelineTaskProvider, PipelineTaskResult, PipelineTa
 import { requestWebhookTrigger } from "../../../clients/beam/requestWebhookTrigger";
 import { BeamAppId } from "../../../clients/beam/BeamAppId";
 import { beam } from "../../../clients/beam/beam";
-import { Environment, getEnvironment } from "../../../clients/firebase/Environment";
-import { config } from "../../../utils/Config";
+import { getEnvironment } from "../../../clients/firebase/Environment";
 import axios from "axios";
+import { config } from "../../../Config";
+import { Environment } from "@sycamore-fyi/shared";
 
 async function startPipelineTasks(remoteMp3FilePath: string, organisationId: string, recordingId: string) {
   let diarizationTaskId: string;
