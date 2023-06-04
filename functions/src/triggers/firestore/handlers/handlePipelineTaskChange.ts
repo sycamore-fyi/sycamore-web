@@ -1,4 +1,4 @@
-import { PipelineTask, PipelineTaskResult, PipelineTaskType } from "../../../models/PipelineTask";
+import { PipelineTask, PipelineTaskResult, PipelineTaskType } from "@sycamore-fyi/shared";
 import { wrapChangeHandler } from "../utils/wrapChangeHandler";
 import { logger } from "firebase-functions/v2";
 import { beam } from "../../../clients/beam/beam";

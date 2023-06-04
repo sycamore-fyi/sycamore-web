@@ -10,14 +10,13 @@ import { parseFilePath } from "../parseFilePath";
 import { Collection } from "../../../clients/firebase/firestore/collection";
 import { audioDurationMs } from "../../../clients/ffmpeg/audioDurationMs";
 import { createBatchDatum, writeBatch } from "../../../clients/firebase/firestore/writeBatch";
-import { PipelineTaskModel, PipelineTaskProvider, PipelineTaskResult, PipelineTaskType } from "../../../models/PipelineTask";
+import { PipelineTaskModel, PipelineTaskProvider, PipelineTaskResult, PipelineTaskType, Environment } from "@sycamore-fyi/shared";
 import { requestWebhookTrigger } from "../../../clients/beam/requestWebhookTrigger";
 import { BeamAppId } from "../../../clients/beam/BeamAppId";
 import { beam } from "../../../clients/beam/beam";
 import { getEnvironment } from "../../../clients/firebase/Environment";
 import axios from "axios";
-import { config } from "../../../Config";
-import { Environment } from "@sycamore-fyi/shared";
+import { config } from "../../../config";
 
 async function startPipelineTasks(remoteMp3FilePath: string, organisationId: string, recordingId: string) {
   let diarizationTaskId: string;
@@ -91,12 +90,18 @@ async function updateDatabaseRecordingObject(localMp3FilePath: string, recording
 export const handleUploadedRecording = async (event: StorageEvent, filePath: string) => {
   logger.info("handling uploaded recording", { filePath });
 
+  const userId = event.data.metadata?.userId;
+
+  if (!userId) {
+    throw new Error("userId not contained in upload metadata");
+  }
+
   const { organisationId, recordingId } = parseFilePath(filePath);
 
   await Promise.all([
     Collection.Recording.doc(recordingId).create({
       organisationId,
-      userId: "abc",
+      userId,
       createdAt: new Date(),
       uploadedFilePath: filePath,
     }),

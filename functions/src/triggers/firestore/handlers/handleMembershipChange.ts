@@ -1,5 +1,5 @@
 import { Collection } from "../../../clients/firebase/firestore/collection";
-import { Membership } from "../../../models/Membership";
+import { Membership } from "@sycamore-fyi/shared";
 import { wrapChangeHandler } from "../utils/wrapChangeHandler";
 
 export const handleMembershipChange = wrapChangeHandler<Membership>({

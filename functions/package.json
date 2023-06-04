@@ -1,5 +1,5 @@
 {
-  "name": "functions",
+  "name": "@sycamore-fyi/functions",
   "scripts": {
     "lint": "eslint --ext .js,.ts . --fix",
     "build": "tsc",

@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
+  font-weight: 400;
+  font-family: 'Jost Variable', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  color: black;
+}
+
+a {
+  text-decoration: underline;
+  font-weight: 600;
+}
+
 html {
   height: 100%;
 }
@@ -14,8 +28,35 @@ body {
   height: 100%;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 2.25em;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3 {
+  font-size: 1.125em;
+}
+
+h4 {
+  font-style: 1em;
+}
+
+h5 {
+  font-size: 0.875em;
+}
+
 :root {
-  font-family: Jost, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -25,10 +66,7 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-}
+
 
 @layer base {
   :root {

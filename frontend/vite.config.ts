@@ -8,4 +8,10 @@ export default defineConfig({
     react(),
     tsconfigPaths({ root: "." })
   ],
+  build: {
+    outDir: "build"
+  },
+  resolve: {
+    preserveSymlinks: true
+  }
 })

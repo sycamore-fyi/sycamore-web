@@ -6,7 +6,7 @@ import { handleAuthUserCreated } from "./triggers/auth/handlers/handleAuthUserCr
 import { setGlobalOptions } from "firebase-functions/v2";
 import { handleAuthUserDeleted } from "./triggers/auth/handlers/handleAuthUserDeleted";
 import { onDocumentWritten } from "firebase-functions/v2/firestore";
-import { CollectionName } from "./clients/firebase/firestore/collection";
+import { CollectionName } from "@sycamore-fyi/shared";
 import { handleMembershipChange } from "./triggers/firestore/handlers/handleMembershipChange";
 import { onRequest } from "firebase-functions/v2/https";
 import { handleHttpRequest } from "./triggers/http/handleHttpRequest";

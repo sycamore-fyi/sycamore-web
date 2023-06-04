@@ -29,7 +29,12 @@ export function wrapEndpoint<
   type Body = typeof schema.body extends undefined ? EmptyObject : typeof bodySchema._type
   type Query = typeof schema.query extends undefined ? EmptyObject : typeof querySchema._type
 
-  type Req = Request<Params, any, Body, Query>
+  interface Req extends Request<Params, any, Body, Query> {
+    user?: {
+      id: string,
+      email: string
+    }
+  }
 
   return (endpoint: (req: Req, res: Response) => Promise<Response> | Response) => {
     return async (

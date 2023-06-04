@@ -1,6 +1,6 @@
 import { Collection } from "../../../clients/firebase/firestore/collection";
 import { deleteAll } from "../../../clients/firebase/firestore/writeBatch";
-import { Organisation } from "../../../models/Organisation";
+import { Organisation } from "@sycamore-fyi/shared";
 import { wrapChangeHandler } from "../utils/wrapChangeHandler";
 
 export const handleOrganisationChange = wrapChangeHandler<Organisation>({

@@ -23,7 +23,7 @@ export const authenticateUser = async (req: any, res: Response, next: NextFuncti
 
     logger.info("decoded id token", { userId: id });
 
-    req["user"] = { id, email };
+    req.user = { id, email };
 
     return next();
   } catch (err) {

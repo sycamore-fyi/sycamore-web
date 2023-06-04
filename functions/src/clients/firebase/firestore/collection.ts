@@ -1,11 +1,6 @@
 import { CollectionReference, FirestoreDataConverter, DocumentData, QueryDocumentSnapshot, Timestamp } from "firebase-admin/firestore";
 import { db } from "../admin";
-import { User } from "../../../models/User";
-import { Organisation } from "../../../models/Organisation";
-import { Membership } from "../../../models/Membership";
-import { Invite } from "../../../models/Invite";
-import { Recording } from "../../../models/Recording";
-import { PipelineTask } from "../../../models/PipelineTask";
+import { User, Organisation, Membership, Invite, Recording, PipelineTask, CollectionName, DiarizedTranscriptSegment } from "@sycamore-fyi/shared";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const converter = <T extends { [key: string]: any }>(): FirestoreDataConverter<T> => ({
@@ -27,17 +22,9 @@ function ref<T>(collectionName: CollectionName) {
   return db.collection(collectionName).withConverter(converter()) as CollectionReference<T>;
 }
 
-export enum CollectionName {
-  USER = "User",
-  ORGANISATION = "Organisation",
-  MEMBERSHIP = "Membership",
-  INVITE = "Invite",
-  RECORDING = "Recording",
-  PIPELINE_TASK = "PipelineTask"
-}
-
 export const Collection = {
   [CollectionName.USER]: ref<User>(CollectionName.USER),
+  [CollectionName.DIARIZED_TRANSCRIPT_SEGMENT]: ref<DiarizedTranscriptSegment>(CollectionName.DIARIZED_TRANSCRIPT_SEGMENT),
   [CollectionName.ORGANISATION]: ref<Organisation>(CollectionName.ORGANISATION),
   [CollectionName.MEMBERSHIP]: ref<Membership>(CollectionName.MEMBERSHIP),
   [CollectionName.INVITE]: ref<Invite>(CollectionName.INVITE),
