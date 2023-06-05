@@ -11,7 +11,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import { Collection } from "@/lib/firebase/Collection";
 
 export default function UserProvider({ children }: { children: ReactNode }) {
-  const { state: { authUser } } = useAuth()
+  const { state: { authUser, isLoading: isAuthLoading } } = useAuth()
   const authUserId = authUser?.uid
 
   const [state, updateState] = useUpdateState<UserContextState>(initialUserState)
@@ -20,7 +20,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     updateState({
-      isLoading: !!authUserId,
+      isLoading: !!authUserId || isAuthLoading,
       user: null
     })
 
@@ -35,7 +35,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
         isLoading: false
       })
     })
-  }, [updateState, authUserId])
+  }, [updateState, authUserId, isAuthLoading])
 
   const value = useMemo(() => ({
     state,

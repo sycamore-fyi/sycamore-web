@@ -20,7 +20,7 @@ export default function CreateOrganisationPage() {
         onSubmit={async ({ name }) => {
           const res = await postServer("/organisations", { name })
           const { organisationId } = res.data
-          navigate(`/organisations/${organisationId}`)
+          navigate(`/s/organisations/${organisationId}`)
         }}
         render={form => (
           <FormFieldUtil

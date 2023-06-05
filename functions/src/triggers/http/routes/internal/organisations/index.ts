@@ -20,13 +20,14 @@ export const post = [
     if (!req.user) return unauthorized(res);
     const { id: userId } = req.user;
     const organisationId = randomUUID();
+    const membershipId = `${organisationId}:${userId}`;
 
     await writeBatch([
       createBatchDatum(Collection.Organisation.doc(organisationId), {
         name,
         createdAt: new Date(),
       }),
-      createBatchDatum(Collection.Membership.doc(), {
+      createBatchDatum(Collection.Membership.doc(membershipId), {
         organisationId,
         userId,
         role: OrganisationRole.ADMIN,
@@ -34,6 +35,9 @@ export const post = [
       }),
     ]);
 
-    return ok(res, { organisationId });
+    return ok(res, {
+      organisationId,
+      membershipId,
+    });
   }),
 ];

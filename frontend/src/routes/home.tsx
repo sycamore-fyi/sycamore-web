@@ -22,8 +22,8 @@ export default function HomePage() {
           ? <Button onClick={signOut}>Sign out</Button>
           : (
             <div className="flex gap-x-2">
-              <Button onClick={() => navigate({ path: "/auth/sign-up", query: { r: "/legal/privacy-policy" } })}>Sign up</Button>
-              <Button onClick={() => navigate({ path: "/auth/log-in", query: { r: "/legal/privacy-policy" } })}>Log in</Button>
+              <Button onClick={() => navigate({ path: "/auth/sign-up", query: { r: "/s/organisations" } })}>Sign up</Button>
+              <Button onClick={() => navigate({ path: "/auth/log-in", query: { r: "/s/organisations" } })}>Log in</Button>
             </div>
           )
       }

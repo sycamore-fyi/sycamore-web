@@ -20,6 +20,8 @@ import ListOrganisationsPage from "./routes/organisations/index.tsx";
 import OrganisationPage from "./routes/organisations/organisation/index.tsx";
 import OrganisationRoot from "./routes/organisations/organisation/OrganisationRoot.tsx";
 import OrganisationsRoot from "./routes/organisations/OrganisationsRoot.tsx";
+import ProfilePage from "./routes/profile.tsx";
+import SecureRoot from "./routes/SecureRoot.tsx";
 
 const router = createBrowserRouter([
   {
@@ -56,29 +58,39 @@ const router = createBrowserRouter([
         element: <PrivacyPolicyPage />
       },
       {
-        path: "organisations/create",
-        element: <CreateOrganisationPage />
-      },
-      {
-        path: "organisations",
-        element: <OrganisationsRoot />,
+        path: "s",
+        element: <SecureRoot />,
         children: [
           {
-            index: true,
-            element: <ListOrganisationsPage />
+            path: "profile",
+            element: <ProfilePage />
+          },
+          {
+            path: "organisations/create",
+            element: <CreateOrganisationPage />
+          },
+          {
+            path: "organisations",
+            element: <OrganisationsRoot />,
+            children: [
+              {
+                index: true,
+                element: <ListOrganisationsPage />
+              }
+            ]
+          },
+          {
+            path: "organisations/:organisationId",
+            element: <OrganisationRoot />,
+            children: [
+              {
+                index: true,
+                element: <OrganisationPage />
+              }
+            ]
           }
         ]
       },
-      {
-        path: "organisations/:organisationId",
-        element: <OrganisationRoot />,
-        children: [
-          {
-            index: true,
-            element: <OrganisationPage />
-          }
-        ]
-      }
     ]
   },
 ]);

@@ -1,7 +1,8 @@
 import {
   ReactNode,
   useEffect,
-  useMemo
+  useMemo,
+  useState
 } from "react";
 import { onAuthStateChanged } from "firebase/auth"
 import { initialAuthState, AuthContext, AuthContextState } from "./AuthContext";
@@ -11,15 +12,18 @@ import { authActions } from "./authActions";
 
 export default function AuthProvider({ children }: { children: ReactNode }) {
   const [state, updateState] = useUpdateState<AuthContextState>(initialAuthState)
+  const [isInitialAuthLoad, setIsInitialAuthLoad] = useState(true)
 
   console.log("rendering auth provider", state)
 
   useEffect(() => onAuthStateChanged(auth, (authUser) => {
     updateState({
       authUser,
-      isLoading: false,
+      isLoading: isInitialAuthLoad,
     })
-  }), [updateState])
+
+    setIsInitialAuthLoad(false)
+  }), [isInitialAuthLoad, updateState])
 
   const value = useMemo(() => ({
     state,

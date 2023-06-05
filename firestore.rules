@@ -1,8 +1,42 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+    function isAuthed() { return request.auth != null }
+    function incomingData() { return request.resource.data }
+    function existingData() { return resource.data }
+    function userId() { return request.auth.uid }
+    function hasChangedKeys(keys) { return changeMap().changedKeys().hasAny(keys) }
+    function hasOnlyChangedKeys(keys) { return changeMap().changedKeys().hasOnly(keys) }
+    function changeMap() { return incomingData().diff(existingData()) }
+    function membershipPath(orgId) { return /databases/$(database)/documents/Membership/$(orgId + ":" + userId()) }
+    function isMember(orgId) { return exists(membershipPath(orgId)) }
+    function isAdmin(orgId) { return isMember(orgId) && get(membershipPath(orgId)).data.role == "ADMIN" }
+
+    match /User/{id} {
+      allow read: if isAuthed();
+      allow update: if isAuthed() && userId() == id;
+    }
+
+    match /Membership/{id} {
+      allow read: if isAuthed() && isMember(existingData().organisationId);
+      allow update: if isAuthed() && isAdmin(existingData().organisationId) && hasOnlyChangedKeys(["role"]);
+    }
+
+    match /Organisation/{id} {
+      allow read: if isAuthed() && isMember(id);
+      allow update, delete: if isAuthed() && isAdmin(id) && hasOnlyChangedKeys(["name"]);
+    }
+
+    match /Recording/{id} {
+      allow read: if isAuthed() && isMember(existingData().organisationId);
+      allow delete: if isAuthed() && isMember(existingData().organisationId);
+    }
+
+    match /DiarizedTranscriptSegment/{id} {
+      allow read: if isAuthed() && isMember(existingData().organisationId);
+      allow create: if isAuthed() && isMember(incomingData().organisationId);
+      allow update: if isAuthed() && isMember(existingData().organisationId) && hasOnlyChangedKeys(["startMs", "endMs", "speakerIndex", "speakerLabel", "text"]);
+      allow delete: if isAuthed() && isMember(existingData().organisationId);
     }
   }
 }
