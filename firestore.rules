@@ -18,13 +18,19 @@ service cloud.firestore {
     }
 
     match /Membership/{id} {
-      allow read: if isAuthed() && isMember(existingData().organisationId);
+      allow read: if isAuthed() && (existingData().userId == userId() || isMember(existingData().organisationId));
       allow update: if isAuthed() && isAdmin(existingData().organisationId) && hasOnlyChangedKeys(["role"]);
+      allow delete: if isAuthed() && (existingData().userId == userId() || isAdmin(existingData().organisationId))
     }
 
     match /Organisation/{id} {
       allow read: if isAuthed() && isMember(id);
-      allow update, delete: if isAuthed() && isAdmin(id) && hasOnlyChangedKeys(["name"]);
+      allow update: if isAuthed() && isAdmin(id) && hasOnlyChangedKeys(["name"]);
+      allow delete: if isAuthed() && isAdmin(id);
+    }
+
+    match /Invite/{id} {
+      allow read: if isAuthed() && isMember(existingData().organisationId)
     }
 
     match /Recording/{id} {
@@ -35,8 +41,14 @@ service cloud.firestore {
     match /DiarizedTranscriptSegment/{id} {
       allow read: if isAuthed() && isMember(existingData().organisationId);
       allow create: if isAuthed() && isMember(incomingData().organisationId);
-      allow update: if isAuthed() && isMember(existingData().organisationId) && hasOnlyChangedKeys(["startMs", "endMs", "speakerIndex", "speakerLabel", "text"]);
+      allow update: if isAuthed() && isMember(existingData().organisationId) && hasOnlyChangedKeys(["startMs", "endMs", "speakerIndex", "text"]);
       allow delete: if isAuthed() && isMember(existingData().organisationId);
+    }
+
+    match /SpeakerAlias/{id} {
+      allow read: if isAuthed() && isMember(existingData().organisationId);
+      allow create: if isAuthed() && isMember(incomingData().organisationId);
+      allow update: if isAuthed() && isMember(existingData().organisationId) && hasOnlyChangedKeys(["speakerLabel"])
     }
   }
 }

@@ -4,6 +4,7 @@ export * from "./models/Membership"
 export * from "./models/Organisation"
 export * from "./models/PipelineTask"
 export * from "./models/Recording"
+export * from "./models/SpeakerAlias"
 export * from "./models/User"
 
 export * from "./enums/CollectionName"

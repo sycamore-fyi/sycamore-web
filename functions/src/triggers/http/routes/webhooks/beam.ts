@@ -4,7 +4,7 @@ import { wrapEndpoint } from "../../utils/wrapEndpoint";
 import { fetchOne } from "../../../../clients/firebase/firestore/fetchOne";
 import { Collection } from "../../../../clients/firebase/firestore/collection";
 
-export const post = wrapEndpoint({})(async (req, res) => {
+export const post = wrapEndpoint({}, false)(async (req, res) => {
   const beamTaskId = req.headers["beam-task-id"];
 
   if (!beamTaskId || Array.isArray(beamTaskId)) {

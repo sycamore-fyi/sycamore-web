@@ -1,6 +1,6 @@
 {
   "projects": {
-    "default": "sycamore-ce2fe",
+    "default": "sycamore-staging",
     "prod": "sycamore-ce2fe",
     "staging": "sycamore-staging"
   },

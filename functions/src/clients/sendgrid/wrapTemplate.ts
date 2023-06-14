@@ -1,0 +1,35 @@
+export const wrapTemplate = (value: string) => `
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <style>
+    {
+      * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+
+      p {
+        margin-bottom: 16px;
+      }
+
+      a {
+        text-decoration: underline;
+        font-weight: 600;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  ${value}
+  <p style="margin-bottom: 0;">Best,</p>
+  <p>The Sycamore Team</p>
+</body>
+
+</html>
+`;

@@ -129,6 +129,7 @@ export const handleUploadedRecording = async (event: StorageEvent, filePath: str
       await Promise.all([
         updateDatabaseRecordingObject(localMp3FilePath, recordingId, destinationPath),
         startPipelineTasks(destinationPath, organisationId, recordingId),
+        bucket.file(filePath).delete(),
       ]);
     }),
   ]);

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { z, ZodObject, ZodRawShape } from "zod";
+import { authenticateUser } from "../middleware/authenticateUser";
 
 const emptyObjectSchema = z.object({});
 type EmptyObject = typeof emptyObjectSchema._type
@@ -17,9 +18,11 @@ interface EndpointSchema<
 export function wrapEndpoint<
   ParamsSchema extends ZodRawShape,
   BodySchema extends ZodRawShape,
-  QuerySchema extends ZodRawShape
+  QuerySchema extends ZodRawShape,
+  T extends boolean = true,
 >(
   schema: EndpointSchema<ParamsSchema, BodySchema, QuerySchema>,
+  isAuthenticated?: T
 ) {
   const paramsSchema = (schema.params ?? emptyObjectSchema) as ZodObject<ParamsSchema>;
   const bodySchema = (schema.body ?? emptyObjectSchema) as ZodObject<BodySchema>;
@@ -28,16 +31,11 @@ export function wrapEndpoint<
   type Params = typeof schema.params extends undefined ? EmptyObject : typeof paramsSchema._type
   type Body = typeof schema.body extends undefined ? EmptyObject : typeof bodySchema._type
   type Query = typeof schema.query extends undefined ? EmptyObject : typeof querySchema._type
-
-  interface Req extends Request<Params, any, Body, Query> {
-    user?: {
-      id: string,
-      email: string
-    }
-  }
+  type BaseReq = Request<Params, any, Body, Query>
+  type Req = T extends true ? (BaseReq & { user: { id: string, email: string, picture: string, displayName?: string } }) : BaseReq
 
   return (endpoint: (req: Req, res: Response) => Promise<Response> | Response) => {
-    return async (
+    const handler = async (
       req: Req,
       res: Response,
       next: NextFunction
@@ -55,5 +53,9 @@ export function wrapEndpoint<
         return next(err);
       }
     };
+    return [
+      ...((isAuthenticated ?? true) ? [authenticateUser] : []),
+      handler,
+    ];
   };
 }

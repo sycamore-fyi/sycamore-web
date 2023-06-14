@@ -19,11 +19,11 @@ export const authenticateUser = async (req: any, res: Response, next: NextFuncti
     logger.info("got id token");
 
     const decodedIdToken = await auth.verifyIdToken(idToken);
-    const { uid: id, email } = decodedIdToken;
+    const { uid: id, email, picture, displayName } = decodedIdToken;
 
     logger.info("decoded id token", { userId: id });
 
-    req.user = { id, email };
+    req.user = { id, email, picture, displayName };
 
     return next();
   } catch (err) {

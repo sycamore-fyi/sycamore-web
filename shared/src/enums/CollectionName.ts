@@ -5,5 +5,6 @@ export enum CollectionName {
   MEMBERSHIP = "Membership",
   INVITE = "Invite",
   RECORDING = "Recording",
-  PIPELINE_TASK = "PipelineTask"
+  PIPELINE_TASK = "PipelineTask",
+  SPEAKER_ALIAS = "SpeakerAlias"
 }

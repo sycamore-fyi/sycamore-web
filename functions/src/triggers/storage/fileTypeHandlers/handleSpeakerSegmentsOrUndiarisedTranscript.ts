@@ -11,6 +11,9 @@ import { FileType } from "../fileTypes/FileType";
 import { saveObjectToStorage } from "../fileTypes/saveFileType";
 import { z } from "zod";
 import { CreateTranscriptionResponse } from "../../../clients/openai/actions/transcribe";
+import { createBatchDatum, writeBatch } from "../../../clients/firebase/firestore/writeBatch";
+import { Collection } from "../../../clients/firebase/firestore/collection";
+import { parseFilePath } from "../parseFilePath";
 
 export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: StorageEvent, filePath: string) => {
   logger.info("handling speaker segments or undiarized transcript", { filePath });
@@ -56,9 +59,21 @@ export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: Storage
     transcriptSegmentsFromOpenaiResponse(undiarizedTranscript)
   );
 
-  await saveObjectToStorage(
-    filePath,
-    diarizedSegments,
-    FileType.DIARIZED_TRANSCRIPT_SEGMENTS
-  );
+  const { organisationId, recordingId } = parseFilePath(filePath);
+
+  await Promise.all([
+    saveObjectToStorage(
+      filePath,
+      diarizedSegments,
+      FileType.DIARIZED_TRANSCRIPT_SEGMENTS
+    ),
+    writeBatch(diarizedSegments.map((diarizedSegment) => createBatchDatum(
+      Collection.DiarizedTranscriptSegment.doc(),
+      {
+        ...diarizedSegment,
+        organisationId,
+        recordingId,
+      }
+    ))),
+  ]);
 };

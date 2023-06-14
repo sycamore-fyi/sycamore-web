@@ -8,15 +8,15 @@ enum Constant {
 
 const allConstants: { [e in Environment]: { [c in Constant]: string } } = {
   LOCAL: {
-    CLIENT_URL: "http://localhost:3000",
+    CLIENT_URL: "http://localhost:5173",
     SERVER_URL: "http://127.0.0.1:5001/sycamore-staging/europe-west1/onExternalHttpRequest",
   },
   STAGING: {
-    CLIENT_URL: "http://localhost:3000",
+    CLIENT_URL: "http://app.sycamore.fyi",
     SERVER_URL: "https://onexternalhttprequest-cxjciu7frq-ew.a.run.app",
   },
   PROD: {
-    CLIENT_URL: "http://localhost:3000",
+    CLIENT_URL: "http://app.sycamore.fyi",
     SERVER_URL: "https://onexternalhttprequest-2yuhotj4nq-ew.a.run.app",
   },
 };

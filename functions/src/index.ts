@@ -1,6 +1,6 @@
 import { onObjectFinalized } from "firebase-functions/v2/storage";
 import { handleObjectFinalized } from "./triggers/storage/handleObjectFinalized";
-import { beamCredentials, openaiCredentials } from "./clients/firebase/secrets";
+import { beamCredentials, openaiCredentials, sendgridCredentials } from "./clients/firebase/secrets";
 import * as functions from "firebase-functions";
 import { handleAuthUserCreated } from "./triggers/auth/handlers/handleAuthUserCreated";
 import { setGlobalOptions } from "firebase-functions/v2";
@@ -12,6 +12,7 @@ import { onRequest } from "firebase-functions/v2/https";
 import { handleHttpRequest } from "./triggers/http/handleHttpRequest";
 import { handleOrganisationChange } from "./triggers/firestore/handlers/handleOrganisationChange";
 import { handlePipelineTaskChange } from "./triggers/firestore/handlers/handlePipelineTaskChange";
+import { handleUserChange } from "./triggers/firestore/handlers/handleUserChange";
 
 const user = functions.region("europe-west1").auth.user();
 
@@ -24,6 +25,7 @@ export const onExternalHttpRequest = onRequest({
   cors: true,
   secrets: [
     openaiCredentials.name,
+    sendgridCredentials.name,
   ],
 }, handleHttpRequest);
 
@@ -44,6 +46,7 @@ export const onPipelineTaskChanged = onDocumentWritten({
 
 export const onMembershipChanged = onDocumentWritten(`${CollectionName.MEMBERSHIP}/{id}`, handleMembershipChange);
 export const onOrganisationChanged = onDocumentWritten(`${CollectionName.ORGANISATION}/{id}`, handleOrganisationChange);
+export const onUserChanged = onDocumentWritten(`${CollectionName.USER}/{id}`, handleUserChange);
 
 export const onAuthUserCreated = user.onCreate(handleAuthUserCreated);
 export const onAuthUserDeleted = user.onDelete(handleAuthUserDeleted);
