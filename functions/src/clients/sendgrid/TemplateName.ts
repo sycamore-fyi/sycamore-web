@@ -1,4 +1,4 @@
 export enum TemplateName {
   INVITE = "invite",
-  RECORDING_PROCESSED = "recording-processed"
+  CALL_PROCESSED = "call-processed"
 }

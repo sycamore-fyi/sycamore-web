@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { useUpdateState } from "@/hooks/useUpdateState";
-import { uploadRecording } from "@/lib/firebase/uploadRecording";
+import { uploadCall } from "@/lib/firebase/uploadCall";
 
 interface Props {
   organisationId: string,
@@ -24,8 +24,8 @@ enum UploadState {
 
 function title(uploadState: UploadState) {
   switch (uploadState) {
-    case UploadState.NOT_STARTED: return "Upload a recording"
-    case UploadState.IN_PROGRESS: return "Uploading your recording"
+    case UploadState.NOT_STARTED: return "Upload a call"
+    case UploadState.IN_PROGRESS: return "Uploading your call"
     case UploadState.COMPLETE: return "Upload complete"
   }
 }
@@ -54,7 +54,7 @@ export default function FileUploadDialog(props: Props) {
     fileInputKey: generateFileUploadKey()
   });
 
-  const handleUploadRecording = async () => {
+  const handleUploadCall = async () => {
     if (!state.files || state.files.length === 0) {
       console.log("no files uploaded");
       return;
@@ -62,7 +62,7 @@ export default function FileUploadDialog(props: Props) {
 
     const [file] = state.files;
 
-    await uploadRecording(
+    await uploadCall(
       file,
       props.organisationId,
       props.userId,
@@ -89,7 +89,7 @@ export default function FileUploadDialog(props: Props) {
       }
     }}>
       <DialogTrigger>
-        <Button>Upload a recording</Button>
+        <Button>Upload a call</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -110,7 +110,7 @@ export default function FileUploadDialog(props: Props) {
         </div>
         <DialogFooter>
           <Button
-            onClick={handleUploadRecording}
+            onClick={handleUploadCall}
             disabled={uploadState !== UploadState.NOT_STARTED}
           >{buttonTitle(uploadState)}</Button>
         </DialogFooter>

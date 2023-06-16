@@ -22,7 +22,7 @@ export interface PipelineTask {
   type: PipelineTaskType,
   provider: PipelineTaskProvider,
   model: PipelineTaskModel,
-  recordingId: string,
+  callId: string,
   organisationId: string,
   beam: {
     taskId: string

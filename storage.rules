@@ -30,14 +30,14 @@ service firebase.storage {
       return request.resource.size < 5 * 1024 * 1024 * 1024 
     }
 
-    match /{orgId}/{recordingId}/{filename} {
+    match /{orgId}/{callId}/{filename} {
       allow read: if isAuthed() && isMember(orgId);
       allow create: if (
         isAuthed() &&
         isMember(orgId) &&
         isValidUploadType() &&
         isReasonableSize() &&
-        filename.matches("uploaded_recording.*") &&
+        filename.matches("uploaded_call.*") &&
         request.resource.metadata.userId == userId()
       )
     }

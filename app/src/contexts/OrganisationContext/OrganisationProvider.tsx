@@ -35,7 +35,7 @@ export default function OrganisationProvider({ children }: { children: ReactNode
       organisation: null,
       memberships: null,
       invites: null,
-      recordings: null
+      calls: null
     })
 
     if (!organisationId || !authUserId) {
@@ -56,8 +56,8 @@ export default function OrganisationProvider({ children }: { children: ReactNode
       })
     })
 
-    onSnapshot(query(Collection.Recording, where("organisationId", "==", organisationId)), ({ docs: recordings }) => {
-      updateState({ recordings }),
+    onSnapshot(query(Collection.Call, where("organisationId", "==", organisationId)), ({ docs: calls }) => {
+      updateState({ calls }),
         () => setError(errorMessage)
     })
 
@@ -68,7 +68,7 @@ export default function OrganisationProvider({ children }: { children: ReactNode
   }, [updateState, organisationId, authUserId])
 
   useEffect(() => {
-    if (!state.organisation || !state.memberships || !state.userMembership || !state.recordings || !state.invites) return
+    if (!state.organisation || !state.memberships || !state.userMembership || !state.calls || !state.invites) return
 
     console.log("should get here")
 
@@ -77,7 +77,7 @@ export default function OrganisationProvider({ children }: { children: ReactNode
     if (state.organisation?.exists() && state.memberships?.length > 0) { return }
 
     setError(errorMessage)
-  }, [state.memberships, state.userMembership, state.organisation, state.recordings, state.invites, updateState])
+  }, [state.memberships, state.userMembership, state.organisation, state.calls, state.invites, updateState])
 
   useEffect(() => {
     setGroup("organisationId", realOrgId ?? "null")

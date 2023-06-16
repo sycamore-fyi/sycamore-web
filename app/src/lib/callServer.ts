@@ -1,4 +1,3 @@
-import { isExpired } from "./jwt/isExpired";
 import axios from "axios"
 // import { HttpMethod } from "@sycamore-fyi/shared"
 import { auth } from "./firebase/app";
@@ -10,8 +9,6 @@ enum HttpMethod {
   PUT = "PUT",
   DELETE = "DELETE"
 }
-
-let cachedIdToken: string
 
 async function call(
   method: HttpMethod,

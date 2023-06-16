@@ -1,7 +1,7 @@
 export interface SpeakerAlias {
   speakerIndex: number,
   speakerLabel: string,
-  recordingId: string,
+  callId: string,
   organisationId: string,
   createdAt: Date,
 }

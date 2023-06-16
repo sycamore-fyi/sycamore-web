@@ -2,7 +2,6 @@ import { Collection } from "../../../clients/firebase/firestore/collection";
 import { User } from "@sycamore-fyi/shared";
 import { wrapChangeHandler } from "../utils/wrapChangeHandler";
 import { updateByQuery } from "../utils/updateByQuery";
-import { deleteAll } from "../../../clients/firebase/firestore/writeBatch";
 import { auth } from "../../../clients/firebase/admin";
 
 export const handleUserChange = wrapChangeHandler<User>({
@@ -23,14 +22,6 @@ export const handleUserChange = wrapChangeHandler<User>({
         displayName: name,
         photoURL: photoUrl,
       }),
-    ]);
-  },
-  async onDelete(beforeData, id) {
-    await Promise.all([
-      deleteAll([
-        Collection.Membership.where("userId", "==", id),
-      ]),
-      auth.deleteUser(id),
     ]);
   },
 });

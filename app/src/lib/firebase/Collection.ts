@@ -3,7 +3,7 @@ import {
   WithFieldValue, FirestoreDataConverter, SnapshotOptions, Timestamp
 } from "firebase/firestore"
 import {
-  CollectionName, DiarizedTranscriptSegment, Invite, Membership, Organisation, Recording, SpeakerAlias, User
+  CollectionName, DiarizedTranscriptSegment, Invite, Membership, Organisation, Call, SpeakerAlias, User
 } from "@sycamore-fyi/shared"
 import { db } from "./app"
 
@@ -32,6 +32,6 @@ export const Collection = {
   [CollectionName.ORGANISATION]: ref<Organisation>(CollectionName.ORGANISATION),
   [CollectionName.MEMBERSHIP]: ref<Membership>(CollectionName.MEMBERSHIP),
   [CollectionName.INVITE]: ref<Invite>(CollectionName.INVITE),
-  [CollectionName.RECORDING]: ref<Recording>(CollectionName.RECORDING),
+  [CollectionName.CALL]: ref<Call>(CollectionName.CALL),
   [CollectionName.SPEAKER_ALIAS]: ref<SpeakerAlias>(CollectionName.SPEAKER_ALIAS),
 }

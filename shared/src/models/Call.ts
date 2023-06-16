@@ -1,4 +1,4 @@
-export interface Recording {
+export interface Call {
   organisationId: string,
   userId: string,
   createdAt: Date,

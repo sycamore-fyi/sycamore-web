@@ -1,44 +1,42 @@
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { useRecording } from "@/contexts/RecordingContext/RecordingContext"
+import { useCall } from "@/contexts/CallContext/CallContext"
 import { useUpdateState } from "@/hooks/useUpdateState"
 import { Pause } from "lucide-react"
 import { Play } from "lucide-react"
 import { MouseEventHandler, useEffect } from "react"
 import { timeStringFromMs } from "./timeStringFromMs"
 import { SpeakerTurnElement } from "./SpeakerTurnElement"
-import { doc, setDoc } from "firebase/firestore"
-import { Collection } from "@/lib/firebase/Collection"
 import { useParams } from "react-router-dom"
 import { logPageView } from "@/lib/lytics/actions"
 import { Page } from "@/lib/lytics/Page"
 import BackLink from "@/components/layout/BackLink"
 import Container from "@/components/layout/Container"
 
-function getAudioVisualisation(audio: HTMLAudioElement) {
-  const audioContext = new AudioContext()
-  const analyzer = audioContext.createAnalyser()
-  const source = audioContext.createMediaElementSource(audio)
-  source.connect(analyzer)
-}
+// function getAudioVisualisation(audio: HTMLAudioElement) {
+//   const audioContext = new AudioContext()
+//   const analyzer = audioContext.createAnalyser()
+//   const source = audioContext.createMediaElementSource(audio)
+//   source.connect(analyzer)
+// }
 
-interface RecordingPageData {
+interface CallPageData {
   audioMs: number,
   hoverAudioMs: number
   mouseLeftOffset: number | null
 }
 
-export default function RecordingPage() {
-  const { state: { recording, speakerTurns, speakerAliases, audio } } = useRecording()
-  const { organisationId, recordingId } = useParams()
+export default function CallPage() {
+  const { state: { speakerTurns, audio } } = useCall()
+  const { organisationId, callId } = useParams()
 
   useEffect(() => {
-    logPageView(Page.RECORDING)
-  }, [recordingId, organisationId])
+    logPageView(Page.CALL)
+  }, [callId, organisationId])
 
   const audioDurationMs = (audio?.duration ?? 0) * 1000
 
-  const [state, updateState] = useUpdateState<RecordingPageData>({
+  const [state, updateState] = useUpdateState<CallPageData>({
     audioMs: 0,
     hoverAudioMs: 0,
     mouseLeftOffset: null
@@ -48,7 +46,7 @@ export default function RecordingPage() {
     return () => {
       audio?.pause()
     }
-  }, [recordingId, audio])
+  }, [callId, audio])
 
   useEffect(() => {
     const timeUpdateListener = () => {
@@ -83,7 +81,7 @@ export default function RecordingPage() {
     })
   }
 
-  const handleMouseLeave: MouseEventHandler<HTMLDivElement> = (event) => {
+  const handleMouseLeave: MouseEventHandler<HTMLDivElement> = () => {
     updateState({ mouseLeftOffset: null })
   }
 
@@ -99,8 +97,8 @@ export default function RecordingPage() {
     <div className="h-full flex flex-col">
       <ScrollArea>
         <Container className="space-y-4 px-4 py-4">
-          <BackLink to={".."}>Back to recordings</BackLink>
-          <h1>Recording</h1>
+          <BackLink to={".."}>Back to calls</BackLink>
+          <h1>Call</h1>
           <div className="space-y-6">
             {
               speakerTurns?.map(turn => (

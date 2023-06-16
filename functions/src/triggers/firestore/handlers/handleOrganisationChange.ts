@@ -18,7 +18,7 @@ export const handleOrganisationChange = wrapChangeHandler<Organisation>({
       Collection.DiarizedTranscriptSegment,
       Collection.Membership,
       Collection.PipelineTask,
-      Collection.Recording,
+      Collection.Call,
     ].map((c) => c.where("organisationId", "==", id));
 
     await deleteAll(queries);

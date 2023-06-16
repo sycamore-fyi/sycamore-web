@@ -6,8 +6,8 @@ export type TemplateData = {
     inviterName: string;
     inviteLink: string;
   };
-  [TemplateName.RECORDING_PROCESSED]: {
+  [TemplateName.CALL_PROCESSED]: {
     addressee: string,
-    recordingLink: string
+    callLink: string
   };
 };

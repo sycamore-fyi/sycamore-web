@@ -1,4 +1,4 @@
 
 export enum Page {
-  RECORDING = "Recording"
+  CALL = "Call"
 }

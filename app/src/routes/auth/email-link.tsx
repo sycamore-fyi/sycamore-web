@@ -4,9 +4,9 @@ import { useQueryParams } from "@/hooks/useQueryParams"
 import { useUpdateState } from "@/hooks/useUpdateState"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { z } from "zod"
-import { FormFieldUtil } from "./FormFieldUtil"
-import { FormUtil } from "./FormUtil"
+import { FormUtil } from "../../components/FormUtil"
+import { emailSchema } from "@/schemas/emailSchema"
+import { FormFieldUtil } from "@/components/FormFieldUtil"
 
 interface Data {
   email: string | null,
@@ -37,9 +37,7 @@ export default function EmailLinkPage() {
       <div className="flex items-center justify-center">
         <div className="max-w-[480px] w-full mx-auto space-y-4">
           <FormUtil
-            schema={z.object({
-              email: z.string().email()
-            })}
+            schema={emailSchema}
             defaultValues={{ email: "" }}
             onSubmit={({ email }) => updateState({ email })}
             render={form => (

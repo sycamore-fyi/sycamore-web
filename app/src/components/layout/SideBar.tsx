@@ -1,6 +1,6 @@
 import { useUpdateState } from "@/hooks/useUpdateState"
 import { cn } from "@/lib/utils"
-import { ArrowLeft, Plus } from "lucide-react"
+import { ArrowLeft, Brain, Plus } from "lucide-react"
 import { LucideIcon } from "lucide-react"
 import { Mic, Settings } from "lucide-react"
 import { Link, NavLink, To, useParams } from "react-router-dom"
@@ -15,7 +15,7 @@ function SideBarLink(props: { to: To, title: string, Icon: LucideIcon, isExpande
   return (
     <NavLink
       to={props.to}
-      className={({ isActive, isPending }) => cn(
+      className={({ isActive }) => cn(
         "flex gap-2 h-12 items-center hover:opacity-60 px-4",
         isActive ? "bg-slate-200" : "",
         !props.isExpanded ? "justify-center" : "",
@@ -33,7 +33,7 @@ interface Data {
 
 export default function SideBar() {
   const { organisationId } = useParams()
-  const { state: { isLoading: isLoadingMemberships, memberships } } = useMemberships()
+  const { state: { memberships } } = useMemberships()
   const activeMembership = memberships?.find(m => m.data()?.organisationId === organisationId)
   const activeMembershipData = activeMembership?.data()
 
@@ -71,7 +71,7 @@ export default function SideBar() {
                     memberships?.map(membership => {
                       const { organisationId: mOrgId, organisationName } = membership.data()!
                       return (
-                        <Link to={`/org/${mOrgId}`}>
+                        <Link to={`/org/${mOrgId}`} key={membership.id}>
                           <DropdownMenuItem className={mOrgId === organisationId ? "bg-slate-100" : "cursor-pointer"}>
                             <Building className="mr-2 h-4 w-4" />
                             {organisationName}
@@ -97,9 +97,15 @@ export default function SideBar() {
 
       </div>
       <SideBarLink
-        to={`/org/${organisationId}/recordings`}
-        title="Recordings"
+        to={`/org/${organisationId}/calls`}
+        title="Calls"
         Icon={Mic}
+        isExpanded={state.isExpanded}
+      />
+      <SideBarLink
+        to={`/org/${organisationId}/assistant`}
+        title="Assistant"
+        Icon={Brain}
         isExpanded={state.isExpanded}
       />
       <SideBarLink

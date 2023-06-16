@@ -5,6 +5,7 @@ import { Collection } from "../../../../../clients/firebase/firestore/collection
 import { ok } from "../../../utils/httpResponses";
 import { randomUUID } from "crypto";
 import { OrganisationRole } from "@sycamore-fyi/shared";
+import { OrganisationPlanId } from "@sycamore-fyi/shared/build/enums/OrganisationPlanId";
 
 export const post = wrapEndpoint({
   body: z.object({
@@ -20,6 +21,7 @@ export const post = wrapEndpoint({
     createBatchDatum(Collection.Organisation.doc(organisationId), {
       name,
       createdAt: new Date(),
+      planId: OrganisationPlanId.FREE,
     }),
     createBatchDatum(Collection.Membership.doc(membershipId), {
       organisationId,

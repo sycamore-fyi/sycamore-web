@@ -7,8 +7,8 @@ import {
 import { useUpdateState } from "../../hooks/useUpdateState";
 import { doc, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { Collection } from "@/lib/firebase/Collection";
-import { RecordingContext, RecordingContextState, initialRecordingState } from "./RecordingContext";
-import { recordingActions } from "./recordingActions";
+import { CallContext, CallContextState, initialCallState } from "./CallContext";
+import { callActions } from "./callActions";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../AuthContext/AuthContext";
 import { getBlob, ref } from "firebase/storage";
@@ -66,43 +66,46 @@ export function speakerTurnsFromDiarizedSegments(
   }, []);
 }
 
-export default function RecordingProvider({ children }: { children: ReactNode }) {
-  const { organisationId, recordingId } = useParams()
+export default function CallProvider({ children }: { children: ReactNode }) {
+  const { organisationId, callId } = useParams()
   const { state: { authUser } } = useAuth()
   const authUserId = authUser?.uid
-  const errorMessage = "Recording either doesn't exist, or you don't have permission to view"
+  const errorMessage = "call either doesn't exist, or you don't have permission to view"
 
-  const [state, updateState] = useUpdateState<RecordingContextState>(initialRecordingState)
+  const [state, updateState] = useUpdateState<CallContextState>(initialCallState)
   const [error, setError] = useState<string>()
 
-  console.log("rendering recording provider", state)
+  console.log("rendering call provider", state)
 
   useEffect(() => {
     setError(undefined)
 
     updateState({
-      isLoading: !!recordingId && !!authUserId,
-      recording: null,
+      isLoading: !!callId && !!authUserId,
+      call: null,
       diarizedSegments: null,
       speakerAliases: null,
       speakerTurns: undefined
     })
 
-    if (!recordingId || !authUserId) {
+    if (!callId || !authUserId) {
       console.log("no organisation id or auth user id in provider, returning")
       setError("No organisation found")
       return
     }
 
-    onSnapshot(doc(Collection.Recording, recordingId),
-      recording => updateState({ recording }),
-      () => setError(errorMessage)
+    onSnapshot(doc(Collection.Call, callId),
+      call => updateState({ call }),
+      (err) => {
+        console.error(err)
+        setError(errorMessage)
+      }
     )
 
     onSnapshot(
       query(
         Collection.DiarizedTranscriptSegment,
-        where("recordingId", "==", recordingId),
+        where("callId", "==", callId),
         where("organisationId", "==", organisationId),
         orderBy("startMs", "asc")
       ),
@@ -110,25 +113,31 @@ export default function RecordingProvider({ children }: { children: ReactNode })
         diarizedSegments: segments,
         speakerTurns: speakerTurnsFromDiarizedSegments(segments.map(s => s.data()))
       }),
-      () => setError(errorMessage)
+      (err) => {
+        console.error(err)
+        setError(errorMessage)
+      }
     )
 
     onSnapshot(
       query(
         Collection.SpeakerAlias,
-        where("recordingId", "==", recordingId),
+        where("callId", "==", callId),
         where("organisationId", "==", organisationId),
       ),
       ({ docs: speakerAliases }) => updateState({
         speakerAliases
       }),
-      () => setError(errorMessage)
+      (err) => {
+        console.error(err)
+        setError(errorMessage)
+      }
     )
-  }, [updateState, recordingId, organisationId, authUserId])
+  }, [updateState, callId, organisationId, authUserId])
 
   useEffect(() => {
     (async () => {
-      const filePath = state.recording?.data()?.processedFilePath
+      const filePath = state.call?.data()?.processedFilePath
 
       if (!filePath) return
 
@@ -138,28 +147,28 @@ export default function RecordingProvider({ children }: { children: ReactNode })
 
       updateState({ audio })
     })()
-  }, [state.recording, updateState])
+  }, [state.call, updateState])
 
   useEffect(() => {
-    if (!state.recording || !state.diarizedSegments || !state.speakerAliases) return
+    if (!state.call || !state.diarizedSegments || !state.speakerAliases) return
 
     updateState({ isLoading: false })
 
-    if (state.recording?.exists() && !!state.diarizedSegments) { return }
+    if (state.call?.exists() && !!state.diarizedSegments) { return }
 
     setError(errorMessage)
-  }, [state.recording, state.diarizedSegments, state.speakerAliases, updateState])
+  }, [state.call, state.diarizedSegments, state.speakerAliases, updateState])
 
   const value = useMemo(() => ({
     state,
-    actions: recordingActions
+    actions: callActions
   }), [state])
 
-  if (error) return <p className="pt-16">{error}</p>
+  if (error) return <p>{error}</p>
 
   return (
-    <RecordingContext.Provider value={value}>
+    <CallContext.Provider value={value}>
       {children}
-    </RecordingContext.Provider>
+    </CallContext.Provider>
   )
 }

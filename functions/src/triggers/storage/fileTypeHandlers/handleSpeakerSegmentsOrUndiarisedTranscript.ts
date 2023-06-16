@@ -59,7 +59,7 @@ export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: Storage
     transcriptSegmentsFromOpenaiResponse(undiarizedTranscript)
   );
 
-  const { organisationId, recordingId } = parseFilePath(filePath);
+  const { organisationId, callId } = parseFilePath(filePath);
 
   await Promise.all([
     saveObjectToStorage(
@@ -72,7 +72,7 @@ export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: Storage
       {
         ...diarizedSegment,
         organisationId,
-        recordingId,
+        callId,
       }
     ))),
   ]);

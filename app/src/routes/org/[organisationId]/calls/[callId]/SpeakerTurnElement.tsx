@@ -1,6 +1,6 @@
 import { Caption } from "@/components/typography/Caption";
 import { Badge } from "@/components/ui/badge";
-import { SpeakerTurn } from "@/contexts/RecordingContext/RecordingProvider";
+import { SpeakerTurn } from "@/contexts/CallContext/CallProvider";
 import { cn } from "@/lib/utils";
 import { timeStringFromMs } from "./timeStringFromMs";
 

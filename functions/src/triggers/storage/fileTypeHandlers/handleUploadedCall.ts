@@ -18,7 +18,7 @@ import { getEnvironment } from "../../../clients/firebase/Environment";
 import axios from "axios";
 import { config } from "../../../config";
 
-async function startPipelineTasks(remoteMp3FilePath: string, organisationId: string, recordingId: string) {
+async function startPipelineTasks(remoteMp3FilePath: string, organisationId: string, callId: string) {
   let diarizationTaskId: string;
   let transcriptionTaskId: string;
 
@@ -38,7 +38,7 @@ async function startPipelineTasks(remoteMp3FilePath: string, organisationId: str
   const basePipelineTaskData = {
     createdAt: new Date(),
     organisationId,
-    recordingId,
+    callId,
     provider: PipelineTaskProvider.BEAM,
     isResolved: false,
     result: PipelineTaskResult.PENDING,
@@ -77,18 +77,18 @@ async function startPipelineTasks(remoteMp3FilePath: string, organisationId: str
   }
 }
 
-async function updateDatabaseRecordingObject(localMp3FilePath: string, recordingId: string, processedFilePath: string) {
+async function updateDatabaseCallObject(localMp3FilePath: string, callId: string, processedFilePath: string) {
   const durationMs = await audioDurationMs(localMp3FilePath);
 
-  await Collection.Recording.doc(recordingId).update({
+  await Collection.Call.doc(callId).update({
     durationMs,
     processedFilePath,
     processedAt: new Date(),
   });
 }
 
-export const handleUploadedRecording = async (event: StorageEvent, filePath: string) => {
-  logger.info("handling uploaded recording", { filePath });
+export const handleUploadedCall = async (event: StorageEvent, filePath: string) => {
+  logger.info("handling uploaded call", { filePath });
 
   const userId = event.data.metadata?.userId;
 
@@ -96,10 +96,10 @@ export const handleUploadedRecording = async (event: StorageEvent, filePath: str
     throw new Error("userId not contained in upload metadata");
   }
 
-  const { organisationId, recordingId } = parseFilePath(filePath);
+  const { organisationId, callId } = parseFilePath(filePath);
 
   await Promise.all([
-    Collection.Recording.doc(recordingId).create({
+    Collection.Call.doc(callId).create({
       organisationId,
       userId,
       createdAt: new Date(),
@@ -115,7 +115,7 @@ export const handleUploadedRecording = async (event: StorageEvent, filePath: str
 
       const destinationPath = path.join(
         path.dirname(filePath),
-        fileNameFromExpectedFileType(FileType.PROCESSED_RECORDING)
+        fileNameFromExpectedFileType(FileType.PROCESSED_CALL)
       );
 
       logger.info("converted file, uploading to Cloud Storage", {
@@ -127,8 +127,8 @@ export const handleUploadedRecording = async (event: StorageEvent, filePath: str
       logger.info("upload successful");
 
       await Promise.all([
-        updateDatabaseRecordingObject(localMp3FilePath, recordingId, destinationPath),
-        startPipelineTasks(destinationPath, organisationId, recordingId),
+        updateDatabaseCallObject(localMp3FilePath, callId, destinationPath),
+        startPipelineTasks(destinationPath, organisationId, callId),
         bucket.file(filePath).delete(),
       ]);
     }),

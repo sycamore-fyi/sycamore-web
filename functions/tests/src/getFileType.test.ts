@@ -2,11 +2,11 @@ import { getFileType } from "../../src/handlers/storage/fileTypes/getFileType"
 import { FileType } from "../../src/handlers/storage/fileTypes/FileType"
 
 describe("getFileType", () => {
-  test("should return FileType.UPLOADED_RECORDING for uploaded_recording.mp3", () => {
-    const filePath = "uploaded_recording.mp3"
+  test("should return FileType.UPLOADED_call for uploaded_call.mp3", () => {
+    const filePath = "uploaded_call.mp3"
     const contentType = "audio/mpeg"
     const fileType = getFileType(filePath, contentType)
-    expect(fileType).toEqual(FileType.UPLOADED_RECORDING)
+    expect(fileType).toEqual(FileType.UPLOADED_call)
   })
 
   test("should return FileType.SPEAKER_SEGMENTS for speaker_segments.rttm", () => {
@@ -23,15 +23,15 @@ describe("getFileType", () => {
   })
 
   test("should throw error when content type is missing", () => {
-    const filePath = "uploaded_recording.mp3"
+    const filePath = "uploaded_call.mp3"
     expect(() => getFileType(filePath)).toThrowError("file has no content type")
   })
 
-  test("should return FileType.PROCESSED_RECORDING for processed_recording.mp3", () => {
-    const filePath = "processed_recording.mp3"
+  test("should return FileType.PROCESSED_call for processed_call.mp3", () => {
+    const filePath = "processed_call.mp3"
     const contentType = "audio/mpeg"
     const fileType = getFileType(filePath, contentType)
-    expect(fileType).toEqual(FileType.PROCESSED_RECORDING)
+    expect(fileType).toEqual(FileType.PROCESSED_call)
   })
 
   test("should return FileType.UNDIARIZED_TRANSCRIPT for undiarized_transcript.json", () => {
@@ -55,15 +55,15 @@ describe("getFileType", () => {
     expect(fileType).toEqual(FileType.PARAPHRASED_SPEAKER_TURNS)
   })
 
-  test("should return FileType.UPLOADED_RECORDING for valid video content type", () => {
-    const filePath = "uploaded_recording.mp4"
+  test("should return FileType.UPLOADED_CALL for valid video content type", () => {
+    const filePath = "uploaded_call.mp4"
     const contentType = "video/mp4"
     const fileType = getFileType(filePath, contentType)
-    expect(fileType).toEqual(FileType.UPLOADED_RECORDING)
+    expect(fileType).toEqual(FileType.UPLOADED_call)
   })
 
   test("should throw error for unknown content type", () => {
-    const filePath = "uploaded_recording.mp3"
+    const filePath = "uploaded_call.mp3"
     const contentType = "unknown/type"
     expect(() => getFileType(filePath, contentType)).toThrowError("invalid combination of filename and content type")
   })

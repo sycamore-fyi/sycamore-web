@@ -2,8 +2,8 @@ import { FileType } from "./FileType";
 
 export const expectedFileData = [
   {
-    fileType: FileType.PROCESSED_RECORDING,
-    fileName: "processed_recording.mp3",
+    fileType: FileType.PROCESSED_CALL,
+    fileName: "processed_call.mp3",
     contentType: "audio/mpeg",
   },
   {
@@ -29,6 +29,6 @@ export const expectedFileData = [
 ];
 
 export function fileNameFromExpectedFileType(fileType: FileType): string {
-  if (fileType === FileType.UPLOADED_RECORDING) throw new Error(`${fileType} is not an expected file type`);
+  if (fileType === FileType.UPLOADED_CALL) throw new Error(`${fileType} is not an expected file type`);
   return expectedFileData.find((datum) => datum.fileType === fileType)?.fileName as string;
 }

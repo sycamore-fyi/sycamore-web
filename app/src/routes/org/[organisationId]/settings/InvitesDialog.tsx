@@ -17,7 +17,10 @@ import { Plus, X } from "lucide-react";
 import { postServer } from "@/lib/callServer";
 import { useState } from "react";
 
-export function InvitesDialog(props: { organisationId: string; }) {
+export function InvitesDialog(props: { organisationId: string, maxInvites?: number }) {
+  const strongMaxInvites = props.maxInvites ?? 10
+
+  console.log("max invites; ", strongMaxInvites)
   const [open, setOpen] = useState(false)
   const form = useForm({
     resolver: zodResolver(z.object({
@@ -41,7 +44,7 @@ export function InvitesDialog(props: { organisationId: string; }) {
     name: "invites",
     rules: {
       minLength: 1,
-      maxLength: 10
+      maxLength: strongMaxInvites
     }
   });
 
@@ -49,6 +52,8 @@ export function InvitesDialog(props: { organisationId: string; }) {
     role: OrganisationRole.ADMIN,
     email: ""
   });
+
+  if (!props.maxInvites) return null
 
   return (
     <Dialog
@@ -105,7 +110,7 @@ export function InvitesDialog(props: { organisationId: string; }) {
                 </div>
               );
             })}
-            {fields.length < 10
+            {fields.length < strongMaxInvites
               ? (
                 <Button
                   onClick={() => append(generateDefaultInviteItem())}

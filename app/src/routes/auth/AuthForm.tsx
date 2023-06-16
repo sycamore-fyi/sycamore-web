@@ -3,14 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { OrDivider } from "@/components/ui/or-divider";
 import { Link, useNavigate } from "react-router-dom";
-import { z } from "zod"
 import { Caption } from "@/components/typography/Caption";
 import googleUrl from "@/assets/google.svg"
 import microsoftUrl from "@/assets/microsoft.svg"
 import { useQueryParams } from "@/hooks/useQueryParams";
-import { FormUtil } from "./FormUtil";
-import { FormFieldUtil } from "./FormFieldUtil";
+import { FormUtil } from "../../components/FormUtil";
 import { Separator } from "@/components/ui/separator";
+import { emailSchema } from "@/schemas/emailSchema";
+import { FormFieldUtil } from "@/components/FormFieldUtil";
 
 export enum AuthType {
   SIGN_UP = "SIGN_UP",
@@ -55,9 +55,7 @@ export function AuthForm({ authType }: { authType: AuthType }) {
         </div>
         <OrDivider />
         <FormUtil
-          schema={z.object({
-            email: z.string().email()
-          })}
+          schema={emailSchema}
           submitTitle="Email me a sign-in link"
           defaultValues={{ email: "" }}
           onSubmit={async ({ email }) => {

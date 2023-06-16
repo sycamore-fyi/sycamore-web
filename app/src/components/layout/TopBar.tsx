@@ -1,5 +1,4 @@
 import sycamoreLogo from "@/assets/logo.svg"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { useAuth } from "@/contexts/AuthContext/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
 import { Button } from "../ui/button"

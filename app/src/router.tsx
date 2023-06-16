@@ -8,19 +8,20 @@ import EmailLinkPage from "./routes/auth/email-link.tsx";
 import EmailLinkSentPage from "./routes/auth/email-link-sent.tsx";
 import CreateOrganisationPage from "./routes/org/create.tsx";
 import ListOrganisationsPage from "./routes/org/index.tsx";
-import RecordingsPage from "./routes/org/[organisationId]/recordings/index.tsx";
+import CallsPage from "./routes/org/[organisationId]/calls/index.tsx";
 import OrganisationRoot from "./routes/org/[organisationId]/OrganisationRoot.tsx";
 import OrganisationsRoot from "./routes/org/OrganisationsRoot.tsx";
 import ProfilePage from "./routes/profile.tsx";
 import AuthGuard from "./routes/AuthGuard.tsx";
-import RecordingRoot from "./routes/org/[organisationId]/recordings/[recordingId]/RecordingRoot.tsx";
-import RecordingPage from "./routes/org/[organisationId]/recordings/[recordingId]/index.tsx";
+import CallRoot from "./routes/org/[organisationId]/calls/[callId]/CallRoot.tsx";
+import CallPage from "./routes/org/[organisationId]/calls/[callId]/index.tsx";
 import HomePage from "./routes/home.tsx";
 import Root from "./routes/root.tsx";
-import SettingsPage from "./routes/org/[organisationId]/settings.tsx";
+import SettingsPage from "./routes/org/[organisationId]/settings/index.tsx";
 import AcceptInvitePage from "./routes/invites/[inviteId]/accept.tsx";
 import { UserGuard } from "./routes/UserGuard.tsx";
 import CompleteProfilePage from "./routes/complete-profile.tsx";
+import AssistantPage from "./routes/org/[organisationId]/assistant/index.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -108,23 +109,27 @@ export const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <RecordingsPage />
+                element: <CallsPage />
               },
               {
                 path: "settings",
                 element: <SettingsPage />
               },
               {
-                path: "recordings",
-                element: <RecordingsPage />
+                path: "calls",
+                element: <CallsPage />
               },
               {
-                path: "recordings/:recordingId",
-                element: <RecordingRoot />,
+                path: "assistant",
+                element: <AssistantPage />
+              },
+              {
+                path: "calls/:callId",
+                element: <CallRoot />,
                 children: [
                   {
                     index: true,
-                    element: <RecordingPage />
+                    element: <CallPage />
                   }
                 ]
               }

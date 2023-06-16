@@ -9,7 +9,9 @@ firebase-debug.*.log
 
 # Firebase cache
 .firebase/
-.DS_Store
+**.DS_Store
+
+**.tgz
 
 # Firebase config
 

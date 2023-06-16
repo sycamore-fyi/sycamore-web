@@ -1,5 +1,5 @@
 {
-  "name": "@sycamore-fyi/frontend",
+  "name": "@sycamore-fyi/app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "install-shared": "npm un sycamore-fyi-shared && npm i ./sycamore-fyi-shared-1.0.0.tgz",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
     "@radix-ui/react-toast": "^1.1.4",
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.6",
+    "@sycamore-fyi/shared": "file:sycamore-fyi-shared-1.0.0.tgz",
     "@tanstack/react-table": "^8.9.2",
     "@tanstack/react-virtual": "^3.0.0-beta.54",
     "axios": "^1.4.0",

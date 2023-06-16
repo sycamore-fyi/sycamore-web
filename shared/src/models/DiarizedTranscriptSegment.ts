@@ -4,6 +4,6 @@ export interface DiarizedTranscriptSegment {
   speakerIndex: number,
   text: string,
   speakerLabel?: string,
-  recordingId: string,
+  callId: string,
   organisationId: string
 }

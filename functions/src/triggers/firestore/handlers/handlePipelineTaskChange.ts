@@ -79,8 +79,8 @@ export const handlePipelineTaskChange = wrapChangeHandler<PipelineTask>({
 
     const outputString = outputBuffer.toString("utf-8");
 
-    const { organisationId, recordingId } = pipelineTaskData;
-    const remoteFilePath = path.join(organisationId, recordingId, outputFileName);
+    const { organisationId, callId } = pipelineTaskData;
+    const remoteFilePath = path.join(organisationId, callId, outputFileName);
 
     logger.info("saving output file to cloud storage", { remoteFilePath });
 

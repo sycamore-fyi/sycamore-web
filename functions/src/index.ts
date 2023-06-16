@@ -1,6 +1,6 @@
 import { onObjectFinalized } from "firebase-functions/v2/storage";
 import { handleObjectFinalized } from "./triggers/storage/handleObjectFinalized";
-import { beamCredentials, openaiCredentials, sendgridCredentials } from "./clients/firebase/secrets";
+import { beamCredentials, hubspotCredentials, openaiCredentials, pineconeCredentials, sendgridCredentials } from "./clients/firebase/secrets";
 import * as functions from "firebase-functions";
 import { handleAuthUserCreated } from "./triggers/auth/handlers/handleAuthUserCreated";
 import { setGlobalOptions } from "firebase-functions/v2";
@@ -26,6 +26,7 @@ export const onExternalHttpRequest = onRequest({
   secrets: [
     openaiCredentials.name,
     sendgridCredentials.name,
+    hubspotCredentials.name,
   ],
 }, handleHttpRequest);
 
@@ -33,6 +34,7 @@ export const onStorageObjectFinalized = onObjectFinalized({
   secrets: [
     openaiCredentials.name,
     beamCredentials.name,
+    pineconeCredentials.name,
   ],
   timeoutSeconds: 60 * 9,
 }, handleObjectFinalized);

@@ -2,17 +2,17 @@ import { ref, uploadBytesResumable } from "firebase/storage"
 import { v4 as uuid } from "uuid"
 import { storage } from "./app"
 
-export async function uploadRecording(
+export async function uploadCall(
   file: File,
   organisationId: string,
   userId: string,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onProgress: (progress: number) => void = () => { }
 ) {
-  const recordingId = uuid()
+  const callId = uuid()
   const extension = file.name.split(".").pop()
-  const recordingRef = ref(storage, `${organisationId}/${recordingId}/uploaded_recording.${extension}`)
-  const uploadTask = uploadBytesResumable(recordingRef, file, {
+  const callRef = ref(storage, `${organisationId}/${callId}/uploaded_call.${extension}`)
+  const uploadTask = uploadBytesResumable(callRef, file, {
     customMetadata: {
       userId
     }

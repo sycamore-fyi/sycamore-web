@@ -33,7 +33,7 @@ service cloud.firestore {
       allow read: if isAuthed() && isMember(existingData().organisationId)
     }
 
-    match /Recording/{id} {
+    match /Call/{id} {
       allow read: if isAuthed() && isMember(existingData().organisationId);
       allow delete: if isAuthed() && isMember(existingData().organisationId);
     }

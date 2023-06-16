@@ -1,4 +1,4 @@
-import { ChatCompletionRequestMessage } from "openai";
+import { ChatCompletionRequestMessage, OpenAIApi } from "openai";
 import { openai } from "../openai";
 import { retry, retryIfTransientApiError } from "../../../utils/retry";
 import { ZodObject, ZodArray, ZodString, ZodNumber, ZodTypeAny } from "zod";
@@ -13,12 +13,13 @@ function parseStringBasedOnSchema(content: string, schema: ZodTypeAny) {
 }
 
 export async function chat<T extends ZodTypeAny>(
+  instance: OpenAIApi = openai(),
   messages: ChatCompletionRequestMessage[],
   schema: T,
   model: ChatModel = "gpt-3.5-turbo",
   temperature = 0.2,
 ) {
-  const getChatCompletion = () => openai().createChatCompletion({
+  const getChatCompletion = () => instance.createChatCompletion({
     model,
     messages,
     temperature,
@@ -43,10 +44,12 @@ export async function chat<T extends ZodTypeAny>(
 export async function chatSimple<T extends ZodTypeAny>(
   prompt: string,
   schema: T,
+  instance: OpenAIApi = openai(),
   model: ChatModel = "gpt-3.5-turbo",
   temperature = 0,
 ) {
   return chat(
+    instance,
     [{ role: "user", content: prompt }],
     schema,
     model,

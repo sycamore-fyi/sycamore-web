@@ -1,12 +1,11 @@
 import { Input } from "@/components/ui/input"
 import { postServer } from "@/lib/callServer"
 import { useNavigate } from "react-router-dom"
-import { z } from "zod"
-import { FormUtil } from "../auth/FormUtil"
-import { FormFieldUtil } from "../auth/FormFieldUtil"
+import { FormUtil } from "../../components/FormUtil"
 import Container from "@/components/layout/Container"
 import BackLink from "../../components/layout/BackLink"
-import { useAuth } from "@/contexts/AuthContext/AuthContext"
+import { organisationSchema } from "@/schemas/organisationSchema"
+import { FormFieldUtil } from "@/components/FormFieldUtil"
 
 export default function CreateOrganisationPage() {
   const navigate = useNavigate()
@@ -16,13 +15,11 @@ export default function CreateOrganisationPage() {
       <BackLink to="/org">Back to organisations</BackLink>
       <h1>Create your organisation</h1>
       <FormUtil
-        schema={z.object({
-          name: z.string()
-        })}
+        schema={organisationSchema}
         defaultValues={{ name: "" }}
         submitTitle="Create organisation"
-        onSubmit={async ({ name }) => {
-          const res = await postServer("/organisations", { name })
+        onSubmit={async (data) => {
+          const res = await postServer("/organisations", data)
           const { organisationId } = res.data
           navigate(`/org/${organisationId}`)
         }}

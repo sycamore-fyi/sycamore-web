@@ -1,4 +1,4 @@
 
 export enum Button {
-  UPLOAD_RECORDING = "UploadRecording"
+  UPLOAD_CALL = "UploadCall"
 }

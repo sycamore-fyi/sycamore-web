@@ -35,6 +35,7 @@ export const put = wrapEndpoint({
 
   const organisation = await fetchById(Collection.Organisation, organisationId);
 
+
   const { name: organisationName } = organisation;
 
   const membershipId = `${organisationId}:${userId}`;

@@ -4,7 +4,8 @@ export enum CollectionName {
   ORGANISATION = "Organisation",
   MEMBERSHIP = "Membership",
   INVITE = "Invite",
-  RECORDING = "Recording",
+  CALL = "Call",
+  OAUTH_CONNECTION = "OauthConnection",
   PIPELINE_TASK = "PipelineTask",
   SPEAKER_ALIAS = "SpeakerAlias"
 }
