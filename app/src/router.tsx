@@ -22,6 +22,7 @@ import AcceptInvitePage from "./routes/invites/[inviteId]/accept.tsx";
 import { UserGuard } from "./routes/UserGuard.tsx";
 import CompleteProfilePage from "./routes/complete-profile.tsx";
 import AssistantPage from "./routes/org/[organisationId]/assistant/index.tsx";
+import OauthRedirectPage from "./routes/oauth/[integration]/index.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -29,34 +30,14 @@ export const router = createBrowserRouter([
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
-      {
-        index: true,
-        element: <HomePage />
-      },
-      {
-        path: "auth/sign-up",
-        element: <SignUpPage />
-      },
-      {
-        path: "auth/log-in",
-        element: <LogInPage />
-      },
-      {
-        path: "auth/email-link",
-        element: <EmailLinkPage />
-      },
-      {
-        path: "auth/email-link-sent",
-        element: <EmailLinkSentPage />
-      },
-      {
-        path: "legal/terms-of-service",
-        element: <TermsOfServicePage />
-      },
-      {
-        path: "legal/privacy-policy",
-        element: <PrivacyPolicyPage />
-      },
+      { index: true, element: <HomePage /> },
+      { path: "auth/sign-up", element: <SignUpPage /> },
+      { path: "auth/log-in", element: <LogInPage /> },
+      { path: "auth/email-link", element: <EmailLinkPage /> },
+      { path: "auth/email-link-sent", element: <EmailLinkSentPage /> },
+      { path: "legal/terms-of-service", element: <TermsOfServicePage /> },
+      { path: "oauth/:integration", element: <OauthRedirectPage /> },
+      { path: "legal/privacy-policy", element: <PrivacyPolicyPage /> },
       {
         path: "complete-profile",
         element: (
@@ -95,34 +76,16 @@ export const router = createBrowserRouter([
           </AuthGuard>
         ),
         children: [
-          {
-            index: true,
-            element: <ListOrganisationsPage />
-          },
-          {
-            path: "create",
-            element: <CreateOrganisationPage />
-          },
+          { index: true, element: <ListOrganisationsPage /> },
+          { path: "create", element: <CreateOrganisationPage /> },
           {
             path: ":organisationId",
             element: <OrganisationRoot />,
             children: [
-              {
-                index: true,
-                element: <CallsPage />
-              },
-              {
-                path: "settings",
-                element: <SettingsPage />
-              },
-              {
-                path: "calls",
-                element: <CallsPage />
-              },
-              {
-                path: "assistant",
-                element: <AssistantPage />
-              },
+              { index: true, element: <CallsPage /> },
+              { path: "settings", element: <SettingsPage /> },
+              { path: "calls", element: <CallsPage /> },
+              { path: "assistant", element: <AssistantPage /> },
               {
                 path: "calls/:callId",
                 element: <CallRoot />,

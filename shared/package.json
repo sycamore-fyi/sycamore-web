@@ -4,8 +4,11 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "build": "rm -rf ./build && tsc && npm pack && cp sycamore-fyi-shared-1.0.0.tgz ../functions && npm --prefix ../functions run install-shared && cp sycamore-fyi-shared-1.0.0.tgz ../app && npm --prefix ../app run install-shared"
+    "build": "rm -rf ./build && tsc && npm pack && cp sycamore-fyi-shared-1.0.0.tgz ../functions && npm --prefix ../functions run install-shared && cp sycamore-fyi-shared-1.0.0.tgz ../app && npm --prefix ../app run install-shared && cp sycamore-fyi-shared-1.0.0.tgz ../chrome-extension && npm --prefix ../chrome-extension run install-shared"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "date-fns": "^2.30.0"
+  }
 }

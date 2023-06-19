@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "deploy:staging": "firebase use staging && vite build --mode staging && firebase deploy --only hosting",
+    "deploy:prod": "firebase use prod && vite build --mode prod && firebase deploy --only hosting",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "install-shared": "npm un sycamore-fyi-shared && npm i ./sycamore-fyi-shared-1.0.0.tgz",
     "preview": "vite preview"

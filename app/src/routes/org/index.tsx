@@ -44,7 +44,7 @@ export default function ListOrganisationsPage() {
         : (
           <p>
             {`You're not a member of any organisations yet. Create one `}
-            <Link to="/org/create" className="font-semibold text-indigo-500 hover:opacity-60">here</Link>
+            <Link to="/org/create" className="font-semibold text-blue-500 hover:opacity-60">here</Link>
             .
           </p>
         )

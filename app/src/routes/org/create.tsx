@@ -18,6 +18,7 @@ export default function CreateOrganisationPage() {
         schema={organisationSchema}
         defaultValues={{ name: "" }}
         submitTitle="Create organisation"
+        successMessage="Organisation created successfully"
         onSubmit={async (data) => {
           const res = await postServer("/organisations", data)
           const { organisationId } = res.data

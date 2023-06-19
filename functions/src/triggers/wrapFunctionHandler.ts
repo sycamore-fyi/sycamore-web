@@ -1,11 +1,13 @@
 import { UserRecord } from "firebase-functions/v1/auth";
-import { CloudEvent, logger } from "firebase-functions/v2";
+import { CloudEvent } from "firebase-functions/v2";
+import { ScheduledEvent } from "firebase-functions/v2/scheduler";
+import { handleError } from "./handleError";
 
-export const wrapFunctionHandler = <EventData, Event extends CloudEvent<EventData>>(handler: (event: Event) => Promise<void>) => async (event: Event) => {
+export const wrapFunctionHandler = <EventData, Event extends CloudEvent<EventData> | ScheduledEvent>(handler: (event: Event) => Promise<void>) => async (event: Event) => {
   try {
     await handler(event);
   } catch (err) {
-    logger.error(err);
+    handleError(err);
   }
 };
 
@@ -13,6 +15,6 @@ export const wrapV1AuthFunctionHandler = (handler: (user: UserRecord) => Promise
   try {
     await handler(user);
   } catch (err) {
-    logger.error(err);
+    handleError(err);
   }
 };

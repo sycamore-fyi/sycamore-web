@@ -69,10 +69,13 @@ export const post = wrapEndpoint({
 })(async (req, res) => {
   const { inviteItems } = req.body;
   const { organisationId } = req.params;
-  const { id: userId, displayName } = req.user;
+  const { id: userId } = req.user;
 
   const inviteIds = inviteItems.map(() => randomUUID());
-  const organisation = await fetchById(Collection.Organisation, organisationId);
+  const [organisation, user] = await Promise.all([
+    fetchById(Collection.Organisation, organisationId),
+    fetchById(Collection.User, userId),
+  ]);
 
   const { planId } = organisation;
 
@@ -108,7 +111,7 @@ export const post = wrapEndpoint({
           toEmail: email,
           data: {
             organisationName: organisation.name,
-            inviterName: displayName ?? "a Sycamore user",
+            inviterName: user.name ?? "a Sycamore user",
             inviteLink: `${config().CLIENT_URL}/invites/${inviteIds[index]}/accept`,
           },
         };

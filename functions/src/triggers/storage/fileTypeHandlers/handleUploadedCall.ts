@@ -10,13 +10,19 @@ import { parseFilePath } from "../parseFilePath";
 import { Collection } from "../../../clients/firebase/firestore/collection";
 import { audioDurationMs } from "../../../clients/ffmpeg/audioDurationMs";
 import { createBatchDatum, writeBatch } from "../../../clients/firebase/firestore/writeBatch";
-import { PipelineTaskModel, PipelineTaskProvider, PipelineTaskResult, PipelineTaskType, Environment } from "@sycamore-fyi/shared";
+import { PipelineTaskModel, PipelineTaskProvider, PipelineTaskResult, PipelineTaskType, Environment, calculateCurrentMonthStartDate, Call, STANDARD_PLAN_TRANSCRIPTION_HOUR_LIMIT } from "@sycamore-fyi/shared";
 import { requestWebhookTrigger } from "../../../clients/beam/requestWebhookTrigger";
 import { BeamAppId } from "../../../clients/beam/BeamAppId";
 import { beam } from "../../../clients/beam/beam";
 import { getEnvironment } from "../../../clients/firebase/Environment";
 import axios from "axios";
 import { config } from "../../../config";
+
+function calculateCallHours(organisationCreatedAt: Date, userId: string, calls: Call[]) {
+  const startOfMonth = calculateCurrentMonthStartDate(organisationCreatedAt);
+  const userCallsInMonth = calls.filter((call) => call.userId === userId && call.createdAt > startOfMonth);
+  return userCallsInMonth.reduce((count, call) => count + (call.durationMs ?? 0) / (1000 * 60 * 60), 0);
+}
 
 async function startPipelineTasks(remoteMp3FilePath: string, organisationId: string, callId: string) {
   let diarizationTaskId: string;
@@ -97,6 +103,34 @@ export const handleUploadedCall = async (event: StorageEvent, filePath: string) 
   }
 
   const { organisationId, callId } = parseFilePath(filePath);
+
+  // if user is past their transcription hours, delete the object and abort
+  const [
+    organisation,
+    { docs: calls },
+  ] = await Promise.all([
+    Collection.Organisation.doc(organisationId).get(),
+    Collection.Call.where("organisationId", "==", organisationId).where("userId", "==", userId).get(),
+  ]);
+
+  const organisationData = organisation.data()!;
+  if (!organisationData) return;
+
+  const startOfMonth = calculateCurrentMonthStartDate(organisationData.createdAt);
+  const callsInMonth = calls.map((call) => call.data()!).filter((call) => call.createdAt > startOfMonth);
+  const callHours = calculateCallHours(startOfMonth, userId, callsInMonth);
+
+  if (callHours > STANDARD_PLAN_TRANSCRIPTION_HOUR_LIMIT) {
+    logger.info("user above call limit, returing", {
+      userId,
+      organisationId,
+      callHours,
+      startOfMonth,
+    });
+
+    await bucket.file(filePath).delete();
+    return;
+  }
 
   await Promise.all([
     Collection.Call.doc(callId).create({

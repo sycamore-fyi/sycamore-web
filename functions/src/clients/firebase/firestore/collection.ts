@@ -1,6 +1,6 @@
 import { CollectionReference, FirestoreDataConverter, DocumentData, QueryDocumentSnapshot, Timestamp } from "firebase-admin/firestore";
 import { db } from "../admin";
-import { User, Organisation, Membership, Invite, Call, PipelineTask, CollectionName, DiarizedTranscriptSegment, OauthConnection } from "@sycamore-fyi/shared";
+import { User, Organisation, Membership, Invite, Call, PipelineTask, CollectionName, DiarizedTranscriptSegment, OauthConnection, DataExtraction, SyncedData, OauthState } from "@sycamore-fyi/shared";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const converter = <T extends { [key: string]: any }>(): FirestoreDataConverter<T> => ({
@@ -31,4 +31,7 @@ export const Collection = {
   [CollectionName.CALL]: ref<Call>(CollectionName.CALL),
   [CollectionName.PIPELINE_TASK]: ref<PipelineTask>(CollectionName.PIPELINE_TASK),
   [CollectionName.OAUTH_CONNECTION]: ref<OauthConnection>(CollectionName.OAUTH_CONNECTION),
+  [CollectionName.DATA_EXTRACTION]: ref<DataExtraction>(CollectionName.DATA_EXTRACTION),
+  [CollectionName.SYNCED_DATA]: ref<SyncedData>(CollectionName.SYNCED_DATA),
+  [CollectionName.OAUTH_STATE]: ref<OauthState>(CollectionName.OAUTH_STATE),
 };

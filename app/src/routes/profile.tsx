@@ -36,6 +36,7 @@ export default function ProfilePage() {
         }}
         defaultValues={{ name: userData.name ?? "" }}
         submitTitle="Save edits"
+        successMessage="Profile updated"
         render={(form) => (
           <FormFieldUtil
             control={form.control}

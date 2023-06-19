@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom"
 import { FormUtil } from "../../components/FormUtil"
 import { emailSchema } from "@/schemas/emailSchema"
 import { FormFieldUtil } from "@/components/FormFieldUtil"
+import { LocalStorageKey } from "@/lib/LocalStorageKey"
 
 interface Data {
   email: string | null,
@@ -19,7 +20,7 @@ export default function EmailLinkPage() {
   const returnPath = r ?? "/"
 
   const [state, updateState] = useUpdateState<Data>({
-    email: localStorage.getItem("emailForSignIn"),
+    email: localStorage.getItem(LocalStorageKey.EMAIL_FOR_SIGN_IN),
   })
 
   useEffect(() => {

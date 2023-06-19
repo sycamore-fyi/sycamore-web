@@ -13,6 +13,8 @@ import { handleHttpRequest } from "./triggers/http/handleHttpRequest";
 import { handleOrganisationChange } from "./triggers/firestore/handlers/handleOrganisationChange";
 import { handlePipelineTaskChange } from "./triggers/firestore/handlers/handlePipelineTaskChange";
 import { handleUserChange } from "./triggers/firestore/handlers/handleUserChange";
+import { onSchedule } from "firebase-functions/v2/scheduler";
+import { handleEveryDay } from "./triggers/cron/handleEveryDay";
 
 const user = functions.region("europe-west1").auth.user();
 
@@ -38,6 +40,10 @@ export const onStorageObjectFinalized = onObjectFinalized({
   ],
   timeoutSeconds: 60 * 9,
 }, handleObjectFinalized);
+
+export const onEveryDay = onSchedule({
+  schedule: "0 * * * *",
+}, handleEveryDay);
 
 export const onPipelineTaskChanged = onDocumentWritten({
   document: `${CollectionName.PIPELINE_TASK}/{id}`,

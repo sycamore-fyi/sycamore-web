@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react"
-import { Invite, Membership, Organisation, Call } from "@sycamore-fyi/shared"
+import { Invite, Membership, Organisation, Call, OauthConnection } from "@sycamore-fyi/shared"
 import { DocumentSnapshot } from "firebase/firestore"
 import { organisationActions } from "./organisationActions"
 
@@ -9,6 +9,7 @@ export interface OrganisationContextState {
   memberships?: DocumentSnapshot<Membership>[] | null,
   userMembership?: DocumentSnapshot<Membership> | null,
   invites?: DocumentSnapshot<Invite>[] | null,
+  oauthConnections?: DocumentSnapshot<OauthConnection>[] | null,
   calls?: DocumentSnapshot<Call>[] | null,
 }
 

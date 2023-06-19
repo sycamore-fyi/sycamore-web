@@ -2,12 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useUpdateState } from "@/hooks/useUpdateState";
 import { uploadCall } from "@/lib/firebase/uploadCall";
 
 interface Props {
   organisationId: string,
-  userId: string
+  userId: string,
+  isWithinLimit: boolean,
 }
 
 interface Data {
@@ -77,6 +79,19 @@ export default function FileUploadDialog(props: Props) {
       ? UploadState.COMPLETE
       : UploadState.IN_PROGRESS
     : UploadState.NOT_STARTED
+
+  if (!props.isWithinLimit) {
+    return (
+      <Tooltip delayDuration={100}>
+        <TooltipTrigger>
+          <Button disabled>Upload a call</Button>
+        </TooltipTrigger>
+        <TooltipContent className="max-w-[200px]">
+          <p>You've used up your transcription hours this month</p>
+        </TooltipContent>
+      </Tooltip>
+    )
+  }
 
   return (
     <Dialog onOpenChange={open => {

@@ -4,9 +4,11 @@ import {
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailLink,
-  signInWithPopup
+  signInWithPopup,
+  OAuthProvider
 } from "firebase/auth"
 import { auth } from "@/lib/firebase/app";
+import { LocalStorageKey } from "@/lib/LocalStorageKey";
 
 export const authActions = {
   async signOut() {
@@ -22,16 +24,24 @@ export const authActions = {
       handleCodeInApp: true
     })
 
-    localStorage.setItem("emailForSignIn", email)
+    localStorage.setItem(LocalStorageKey.EMAIL_FOR_SIGN_IN, email)
   },
   async handleEmailLink(email: string, emailLink: string) {
     if (!isSignInWithEmailLink(auth, emailLink)) return
     await signInWithEmailLink(auth, email, emailLink)
-    localStorage.removeItem("emailForSignIn")
+    localStorage.removeItem(LocalStorageKey.EMAIL_FOR_SIGN_IN)
   },
   async signInWithGoogle() {
     const provider = new GoogleAuthProvider()
     provider.addScope("email")
+
+    return signInWithPopup(auth, provider)
+  },
+  async signInWithMicrosoft() {
+    const provider = new OAuthProvider('microsoft.com');
+    provider.setCustomParameters({
+      prompt: "consent"
+    })
 
     return signInWithPopup(auth, provider)
   },

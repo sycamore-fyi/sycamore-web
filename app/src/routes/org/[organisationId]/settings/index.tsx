@@ -7,14 +7,14 @@ import { useAuth } from "@/contexts/AuthContext/AuthContext"
 import { DetailsTab } from "./tabs/DetailsTab"
 import { BillingTab } from "./tabs/BillingTab"
 import { TeamTab } from "./tabs/TeamTab"
-import { IntegrationsTab } from "./tabs/IntegrationsTab"
+import { IntegrationsTab } from "./tabs/integrations/IntegrationsTab"
 
 export default function SettingsPage() {
-  const { state: { organisation, memberships, userMembership, invites, isLoading } } = useOrganisation()
+  const { state: { organisation, memberships, userMembership, invites, oauthConnections, isLoading } } = useOrganisation()
   const { state: { authUser } } = useAuth()
   const isAdmin = userMembership?.data()?.role === OrganisationRole.ADMIN
   const orgData = organisation?.data()
-  if (isLoading || !organisation || !orgData || !invites || !memberships || !authUser) return null
+  if (isLoading || !organisation || !orgData || !invites || !memberships || !authUser || !oauthConnections) return null
 
   const pendingInvites = invites?.filter(i => {
     const data = i.data()
@@ -27,7 +27,10 @@ export default function SettingsPage() {
   return <ScrollArea className="h-full">
     <Container className="space-y-8 py-12">
       <h1>Settings</h1>
-      <Tabs className="w-full space-y-8" defaultValue="details">
+      <Tabs
+        className="w-full space-y-8"
+        defaultValue="details"
+      >
         <TabsList className="w-full grid grid-cols-4">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
@@ -42,7 +45,7 @@ export default function SettingsPage() {
           pendingInvites={pendingInvites}
           userId={userId}
         />
-        <IntegrationsTab />
+        <IntegrationsTab connections={oauthConnections} isAdmin={isAdmin} />
         <BillingTab />
       </Tabs>
     </Container>

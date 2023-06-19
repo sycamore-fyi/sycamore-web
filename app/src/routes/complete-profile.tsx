@@ -27,6 +27,7 @@ export default function CompleteProfilePage() {
           navigate(returnPath)
         }}
         submitTitle="Save"
+        successMessage="Profile completed"
         render={form => (
           <FormFieldUtil
             control={form.control}

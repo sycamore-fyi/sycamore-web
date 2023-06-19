@@ -1,11 +1,13 @@
+import NavBar from "@/components/layout/NavBar"
 import './globals.css'
 import { Jost } from 'next/font/google'
 
-const inter = Jost({ subsets: ['latin'] })
+const jost = Jost({ subsets: ['latin'] })
 
 export const metadata = {
   title: 'Sycamore',
   description: 'Increase deal conversion rates and reduce after call work with automated sales call analysis.',
+  "og:image": "https://sycamore.fyi/logo.svg"
 }
 
 export default function RootLayout({
@@ -15,7 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={jost.className}>
+        <NavBar />
+        {children}
+      </body>
     </html>
   )
 }

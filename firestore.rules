@@ -30,7 +30,12 @@ service cloud.firestore {
     }
 
     match /Invite/{id} {
-      allow read: if isAuthed() && isMember(existingData().organisationId)
+      allow read: if isAuthed() && isMember(existingData().organisationId);
+    }
+
+    match /OauthConnection/{id} {
+      allow read: if isAuthed() && isMember(existingData().organisationId);
+      allow delete: if isAuthed() && isAdmin(existingData().organisationId);
     }
 
     match /Call/{id} {

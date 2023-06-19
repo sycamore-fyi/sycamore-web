@@ -44,40 +44,57 @@ export default function OrganisationProvider({ children }: { children: ReactNode
       return
     }
 
-    onSnapshot(doc(Collection.Organisation, organisationId),
+    const orgUnsub = onSnapshot(
+      doc(Collection.Organisation, organisationId),
       organisation => updateState({ organisation }),
       () => setError(errorMessage)
     )
 
-    onSnapshot(query(Collection.Membership, where("organisationId", "==", organisationId)), ({ docs: memberships }) => {
-      updateState({
+    const membershipsUnsub = onSnapshot(
+      query(Collection.Membership, where("organisationId", "==", organisationId)),
+      ({ docs: memberships }) => updateState({
         memberships,
         userMembership: memberships.find(m => m.data().userId === authUserId)
-      })
-    })
+      }),
+      () => setError(errorMessage)
+    )
 
-    onSnapshot(query(Collection.Call, where("organisationId", "==", organisationId)), ({ docs: calls }) => {
-      updateState({ calls }),
-        () => setError(errorMessage)
-    })
+    const callsUnsub = onSnapshot(
+      query(Collection.Call, where("organisationId", "==", organisationId)),
+      ({ docs: calls }) => updateState({ calls }),
+      () => setError(errorMessage)
+    )
 
-    onSnapshot(query(Collection.Invite, where("organisationId", "==", organisationId)), ({ docs: invites }) => {
-      updateState({ invites }),
-        () => setError(errorMessage)
-    })
+    const invitesUnsub = onSnapshot(
+      query(Collection.Invite, where("organisationId", "==", organisationId)),
+      ({ docs: invites }) => updateState({ invites }),
+      () => setError(errorMessage)
+    )
+
+    const connectionsUnsub = onSnapshot(
+      query(Collection.OauthConnection, where("organisationId", "==", organisationId)),
+      ({ docs: oauthConnections }) => updateState({ oauthConnections }),
+      () => setError(errorMessage)
+    )
+
+    return () => {
+      orgUnsub()
+      membershipsUnsub()
+      callsUnsub()
+      invitesUnsub()
+      connectionsUnsub()
+    }
   }, [updateState, organisationId, authUserId])
 
   useEffect(() => {
-    if (!state.organisation || !state.memberships || !state.userMembership || !state.calls || !state.invites) return
-
-    console.log("should get here")
+    if (!state.organisation || !state.memberships || !state.userMembership || !state.calls || !state.invites || !state.oauthConnections) return
 
     updateState({ isLoading: false })
 
     if (state.organisation?.exists() && state.memberships?.length > 0) { return }
 
     setError(errorMessage)
-  }, [state.memberships, state.userMembership, state.organisation, state.calls, state.invites, updateState])
+  }, [state.memberships, state.userMembership, state.organisation, state.calls, state.invites, state.oauthConnections, updateState])
 
   useEffect(() => {
     setGroup("organisationId", realOrgId ?? "null")

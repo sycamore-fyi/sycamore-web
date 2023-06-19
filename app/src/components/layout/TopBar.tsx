@@ -2,7 +2,7 @@ import sycamoreLogo from "@/assets/logo.svg"
 import { useAuth } from "@/contexts/AuthContext/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
 import { Button } from "../ui/button"
-import { LogOut, LucideChevronDown, User } from "lucide-react"
+import { Building, LogOut, LucideChevronDown, User } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import UserAvatar from "./UserAvatar"
 import { useUser } from "@/contexts/UserContext/UserContext"
@@ -38,6 +38,12 @@ export default function TopBar() {
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <Link to="/org">
+                    <DropdownMenuItem className="cursor-pointer">
+                      <Building className="mr-2 h-4 w-4" />
+                      <span>Organisations</span>
+                    </DropdownMenuItem>
+                  </Link>
                   <Link to="/profile">
                     <DropdownMenuItem className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />

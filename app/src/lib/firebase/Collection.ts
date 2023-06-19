@@ -3,7 +3,7 @@ import {
   WithFieldValue, FirestoreDataConverter, SnapshotOptions, Timestamp
 } from "firebase/firestore"
 import {
-  CollectionName, DiarizedTranscriptSegment, Invite, Membership, Organisation, Call, SpeakerAlias, User
+  CollectionName, DiarizedTranscriptSegment, Invite, Membership, Organisation, Call, SpeakerAlias, User, OauthConnection
 } from "@sycamore-fyi/shared"
 import { db } from "./app"
 
@@ -34,4 +34,5 @@ export const Collection = {
   [CollectionName.INVITE]: ref<Invite>(CollectionName.INVITE),
   [CollectionName.CALL]: ref<Call>(CollectionName.CALL),
   [CollectionName.SPEAKER_ALIAS]: ref<SpeakerAlias>(CollectionName.SPEAKER_ALIAS),
+  [CollectionName.OAUTH_CONNECTION]: ref<OauthConnection>(CollectionName.OAUTH_CONNECTION)
 }

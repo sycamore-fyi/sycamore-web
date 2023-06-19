@@ -38,12 +38,12 @@ const allConstants: { [e in Environment]: { [c in Constant]: any } } = {
   PROD: {
     SERVER_URL: "https://onexternalhttprequest-2yuhotj4nq-ew.a.run.app",
     FIREBASE_CONFIG: {
-      apiKey: "AIzaSyA4c7hJOhHiWdEbmRVrSiKa7XI47-0bRn0",
-      authDomain: "sycamore-staging.firebaseapp.com",
-      projectId: "sycamore-staging",
-      storageBucket: "sycamore-staging.appspot.com",
-      messagingSenderId: "76556239915",
-      appId: "1:76556239915:web:ad86edc7d899fb9636566e"
+      apiKey: "AIzaSyDdEdb-3_yQQdAPKg1AvWCkUhTx_bal57A",
+      authDomain: "sycamore-ce2fe.firebaseapp.com",
+      projectId: "sycamore-ce2fe",
+      storageBucket: "sycamore-ce2fe.appspot.com",
+      messagingSenderId: "301957710713",
+      appId: "1:301957710713:web:ac0599a348393be09aa5a8"
     },
     AMPLITUDE_API_KEY: "89d105e6219d3b695f71ac21cd887f55",
     SMARTLOOK_KEY: "40fc574aed4765bcd022c79b4ad5ebe3249a8dd3",

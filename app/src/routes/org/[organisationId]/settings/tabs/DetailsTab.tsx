@@ -30,6 +30,7 @@ export function DetailsTab({ isAdmin, organisation }: Props) {
           await updateDoc(organisation.ref, data);
         }}
         submitTitle="Save changes"
+        successMessage="Organisation updated"
         render={form => (
           <FormFieldUtil
             control={form.control}

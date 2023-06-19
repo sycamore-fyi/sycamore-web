@@ -1,3 +1,4 @@
 export enum OauthIntegration {
-  HUBSPOT = "Hubspot"
+  HUBSPOT = "hubspot",
+  SALESFORCE = "salesforce"
 }

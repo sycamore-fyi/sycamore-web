@@ -5,6 +5,7 @@
     "noUnusedLocals": true,
     "outDir": "build",
     "sourceMap": true,
+    "skipLibCheck": true,
     "strict": true,
     "target": "es2017",
     "resolveJsonModule": true,

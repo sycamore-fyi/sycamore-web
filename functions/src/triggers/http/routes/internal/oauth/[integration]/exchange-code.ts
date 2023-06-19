@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { wrapEndpoint } from "../../../../utils/wrapEndpoint";
-import { exchangeAuthCodeForTokens } from "../../../../../../clients/oauth/fetchTokens";
+import { exchangeAuthCodeForTokens } from "../../../../../../clients/oauth/auth/exchangeAuthCodeForTokens";
 import { Collection } from "../../../../../../clients/firebase/firestore/collection";
 import { OauthIntegration } from "@sycamore-fyi/shared";
 
@@ -10,15 +10,24 @@ export const post = wrapEndpoint({
   }),
   body: z.object({
     code: z.string().nonempty(),
-    organisationId: z.string().nonempty(),
+    state: z.string().nonempty(),
   }),
-})(async (req, res) => {
+}, false)(async (req, res) => {
   const {
-    body: { code, organisationId },
+    body: { code, state: stateId },
     params: { integration },
   } = req;
 
-  const { refreshToken } = await exchangeAuthCodeForTokens(integration, code);
+  const [{ refreshToken }, state] = await Promise.all([
+    exchangeAuthCodeForTokens(integration, code),
+    Collection.OauthState.doc(stateId).get(),
+  ]);
+
+  const stateData = state.data();
+
+  if (!stateData) throw new Error("no state data");
+
+  const { organisationId } = stateData;
 
   await Collection.OauthConnection.add({
     integration,
@@ -27,5 +36,5 @@ export const post = wrapEndpoint({
     refreshToken,
   });
 
-  return res.sendStatus(200);
+  return res.status(200).json({ organisationId });
 });

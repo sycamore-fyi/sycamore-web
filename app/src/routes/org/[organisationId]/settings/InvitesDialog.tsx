@@ -19,8 +19,6 @@ import { useState } from "react";
 
 export function InvitesDialog(props: { organisationId: string, maxInvites?: number }) {
   const strongMaxInvites = props.maxInvites ?? 10
-
-  console.log("max invites; ", strongMaxInvites)
   const [open, setOpen] = useState(false)
   const form = useForm({
     resolver: zodResolver(z.object({

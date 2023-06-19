@@ -33,10 +33,13 @@ export const put = wrapEndpoint({
 
   if (userEmail !== inviteEmail) return clientError(res, "Invite is not for you");
 
-  const organisation = await fetchById(Collection.Organisation, organisationId);
-
+  const [organisation, user] = await Promise.all([
+    fetchById(Collection.Organisation, organisationId),
+    fetchById(Collection.User, userId),
+  ]);
 
   const { name: organisationName } = organisation;
+  const { name: userName, photoUrl: userPhotoUrl } = user;
 
   const membershipId = `${organisationId}:${userId}`;
 
@@ -46,6 +49,8 @@ export const put = wrapEndpoint({
       organisationName,
       userId,
       role,
+      userName,
+      userPhotoUrl,
       createdAt: new Date(),
     }),
     updateBatchDatum(Collection.Invite.doc(inviteId), {

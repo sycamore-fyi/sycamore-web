@@ -7,5 +7,8 @@ export enum CollectionName {
   CALL = "Call",
   OAUTH_CONNECTION = "OauthConnection",
   PIPELINE_TASK = "PipelineTask",
-  SPEAKER_ALIAS = "SpeakerAlias"
+  SPEAKER_ALIAS = "SpeakerAlias",
+  SYNCED_DATA = "SyncedData",
+  DATA_EXTRACTION = "DataExtraction",
+  OAUTH_STATE = "OauthState",
 }

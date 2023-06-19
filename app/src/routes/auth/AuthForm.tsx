@@ -4,13 +4,14 @@ import { Input } from "@/components/ui/input";
 import { OrDivider } from "@/components/ui/or-divider";
 import { Link, useNavigate } from "react-router-dom";
 import { Caption } from "@/components/typography/Caption";
-import googleUrl from "@/assets/google.svg"
-import microsoftUrl from "@/assets/microsoft.svg"
+import googleUrl from "@/assets/google-logo.png"
+import microsoftUrl from "@/assets/microsoft-logo.png"
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { FormUtil } from "../../components/FormUtil";
 import { Separator } from "@/components/ui/separator";
 import { emailSchema } from "@/schemas/emailSchema";
 import { FormFieldUtil } from "@/components/FormFieldUtil";
+import { UserCredential } from "firebase/auth";
 
 export enum AuthType {
   SIGN_UP = "SIGN_UP",
@@ -21,6 +22,7 @@ export function AuthForm({ authType }: { authType: AuthType }) {
   const {
     actions: {
       signInWithGoogle,
+      signInWithMicrosoft,
       sendEmailLink
     }
   } = useAuth()
@@ -30,8 +32,8 @@ export function AuthForm({ authType }: { authType: AuthType }) {
 
   const navigate = useNavigate()
 
-  async function handleSignInWithGoogle() {
-    const credentials = await signInWithGoogle()
+  const handleSignIn = (signInMethod: () => Promise<UserCredential>) => async () => {
+    const credentials = await signInMethod()
     if (!!credentials && !!credentials.user) navigate(returnPath)
   }
 
@@ -43,12 +45,16 @@ export function AuthForm({ authType }: { authType: AuthType }) {
           <Button
             className="w-full gap-x-2"
             variant="outline"
-            onClick={handleSignInWithGoogle}
+            onClick={handleSignIn(signInWithGoogle)}
           >
             <img className="h-4 w-4" src={googleUrl} />
             Continue with Google
           </Button>
-          <Button className="w-full gap-x-2" variant="outline">
+          <Button
+            className="w-full gap-x-2"
+            variant="outline"
+            onClick={handleSignIn(signInWithMicrosoft)}
+          >
             <img className="h-4 w-4" src={microsoftUrl} />
             Continue with Microsoft
           </Button>
@@ -87,7 +93,7 @@ export function AuthForm({ authType }: { authType: AuthType }) {
         {`${authType === AuthType.SIGN_UP ? "Already" : "Don't"} have an account? `}
         <Link
           to={`/auth/${authType === AuthType.SIGN_UP ? "log-in" : "sign-up"}`}
-          className="font-semibold text-purple-500 hover:opacity-80"
+          className="font-semibold text-blue-500 hover:opacity-80"
         >
           {authType === AuthType.SIGN_UP ? "Log in" : "Sign up"}
         </Link>

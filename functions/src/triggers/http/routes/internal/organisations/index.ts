@@ -6,6 +6,7 @@ import { ok } from "../../../utils/httpResponses";
 import { randomUUID } from "crypto";
 import { OrganisationRole } from "@sycamore-fyi/shared";
 import { OrganisationPlanId } from "@sycamore-fyi/shared/build/enums/OrganisationPlanId";
+import { fetchById } from "../../../../../clients/firebase/firestore/fetchById";
 
 export const post = wrapEndpoint({
   body: z.object({
@@ -13,9 +14,12 @@ export const post = wrapEndpoint({
   }),
 })(async (req, res) => {
   const { name } = req.body;
-  const { id: userId, displayName, picture } = req.user;
+  const { id: userId } = req.user;
   const organisationId = randomUUID();
   const membershipId = `${organisationId}:${userId}`;
+
+  const user = await fetchById(Collection.User, userId);
+  const { name: userName, photoUrl } = user;
 
   await writeBatch([
     createBatchDatum(Collection.Organisation.doc(organisationId), {
@@ -27,8 +31,8 @@ export const post = wrapEndpoint({
       organisationId,
       organisationName: name,
       userId,
-      userName: displayName,
-      userPhotoUrl: picture,
+      userName,
+      userPhotoUrl: photoUrl,
       role: OrganisationRole.ADMIN,
       createdAt: new Date(),
     }),

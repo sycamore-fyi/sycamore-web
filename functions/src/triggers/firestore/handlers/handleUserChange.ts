@@ -15,9 +15,6 @@ export const handleUserChange = wrapChangeHandler<User>({
         userName: name,
         userPhotoUrl: photoUrl,
       }),
-      auth.setCustomUserClaims(id, {
-        displayName: name,
-      }),
       auth.updateUser(id, {
         displayName: name,
         photoURL: photoUrl,
