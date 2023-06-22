@@ -14,10 +14,11 @@ export function UserGuard({ children }: { children: ReactNode; }) {
   const navigate = useComplexNavigate();
 
   useEffect(() => {
-    if (isLoading)
-      return;
+
+    if (isLoading) return;
 
     const userData = user?.data();
+    console.log({ isLoading, user, userData })
 
     if (!user || !userData)
       return;
@@ -33,6 +34,8 @@ export function UserGuard({ children }: { children: ReactNode; }) {
       setHasPassedGuard(true)
     }
   }, [isLoading, user, navigate, location.pathname]);
+
+  console.log({ isLoading, user, hasPassedGuard })
 
   if (isLoading || !user || !hasPassedGuard)
     return <LoadingDashboard />;

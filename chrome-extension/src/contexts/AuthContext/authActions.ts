@@ -1,11 +1,11 @@
 import {
-  deleteUser,
   GoogleAuthProvider,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailLink,
   signInWithPopup,
-  OAuthProvider
+  OAuthProvider,
+  signInWithCredential
 } from "firebase/auth"
 import { auth } from "@/lib/firebase/app";
 import { LocalStorageKey } from "@/lib/LocalStorageKey";
@@ -14,28 +14,24 @@ export const authActions = {
   async signOut() {
     return auth.signOut()
   },
-  async sendEmailLink(email: string, returnPath: string) {
-    const redirectUrl = new URL(window.location.href)
-    redirectUrl.pathname = "/auth/email-link"
-    redirectUrl.searchParams.set("returnPath", encodeURIComponent(returnPath))
-
+  async sendEmailLink(email: string) {
+    const url = "chrome-extension://bakademnfhcofbmpjeccppdokbmopjpj"
     await sendSignInLinkToEmail(auth, email, {
-      url: redirectUrl.href,
+      url,
       handleCodeInApp: true
     })
 
-    localStorage.setItem(LocalStorageKey.EMAIL_FOR_SIGN_IN, email)
+    chrome.storage.local.set({ [LocalStorageKey.EMAIL_FOR_SIGN_IN]: email })
   },
   async handleEmailLink(email: string, emailLink: string) {
     if (!isSignInWithEmailLink(auth, emailLink)) return
     await signInWithEmailLink(auth, email, emailLink)
-    localStorage.removeItem(LocalStorageKey.EMAIL_FOR_SIGN_IN)
+    chrome.storage.local.remove(LocalStorageKey.EMAIL_FOR_SIGN_IN)
   },
   async signInWithGoogle() {
-    const provider = new GoogleAuthProvider()
-    provider.addScope("email")
-
-    return signInWithPopup(auth, provider)
+    const { token } = await chrome.identity.getAuthToken({ interactive: true })
+    const credential = GoogleAuthProvider.credential(null, token)
+    return signInWithCredential(auth, credential)
   },
   async signInWithMicrosoft() {
     const provider = new OAuthProvider('microsoft.com');

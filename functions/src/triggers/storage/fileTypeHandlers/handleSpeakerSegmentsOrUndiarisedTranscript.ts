@@ -14,6 +14,9 @@ import { CreateTranscriptionResponse } from "../../../clients/openai/actions/tra
 import { createBatchDatum, writeBatch } from "../../../clients/firebase/firestore/writeBatch";
 import { Collection } from "../../../clients/firebase/firestore/collection";
 import { parseFilePath } from "../parseFilePath";
+import { sendEmail } from "../../../clients/sendgrid/sendEmail";
+import { TemplateName } from "../../../clients/sendgrid/TemplateName";
+import { config } from "../../../config";
 
 export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: StorageEvent, filePath: string) => {
   logger.info("handling speaker segments or undiarized transcript", { filePath });
@@ -30,10 +33,16 @@ export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: Storage
       .map((file) => path.basename(file.name)),
   });
 
+  const { organisationId, callId } = parseFilePath(filePath);
+  const callRef = Collection.Call.doc(callId);
+
   const [speakerSegmentsFile, undiarizedTranscriptFile] = [
     fileNameFromExpectedFileType(FileType.SPEAKER_SEGMENTS),
     fileNameFromExpectedFileType(FileType.UNDIARIZED_TRANSCRIPT),
   ].map((fileName: string) => files.find((file) => path.basename(file.name) === fileName));
+
+  if (speakerSegmentsFile) await callRef.update({ isDiarized: true });
+  if (undiarizedTranscriptFile) await callRef.update({ isTranscribed: true });
 
   const canConstructDiarizedTranscriptSegments = speakerSegmentsFile && undiarizedTranscriptFile;
 
@@ -59,7 +68,9 @@ export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: Storage
     transcriptSegmentsFromOpenaiResponse(undiarizedTranscript)
   );
 
-  const { organisationId, callId } = parseFilePath(filePath);
+  const call = await Collection.Call.doc(callId).get();
+  const user = await Collection.User.doc(call.data()!.userId).get();
+  const { email, name } = user.data()!;
 
   await Promise.all([
     saveObjectToStorage(
@@ -75,5 +86,13 @@ export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: Storage
         callId,
       }
     ))),
+    callRef.update({ wereDiarizedSegmentsCreated: true }),
+    sendEmail(TemplateName.CALL_PROCESSED)([{
+      toEmail: email!,
+      data: {
+        addressee: name!,
+        callLink: `${config().CLIENT_URL}/org/${organisationId}/calls/${callId}`,
+      },
+    }]),
   ]);
 };

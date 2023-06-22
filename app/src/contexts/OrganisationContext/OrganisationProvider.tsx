@@ -22,6 +22,11 @@ export default function OrganisationProvider({ children }: { children: ReactNode
   const [state, updateState] = useUpdateState<OrganisationContextState>(initialOrganisationState)
   const [error, setError] = useState<string>()
 
+  const handleError = (err: unknown) => {
+    console.error(err)
+    setError(errorMessage)
+  }
+
   console.log("rendering organisation provider", state)
 
   const realOrgId = state.organisation?.id
@@ -47,7 +52,7 @@ export default function OrganisationProvider({ children }: { children: ReactNode
     const orgUnsub = onSnapshot(
       doc(Collection.Organisation, organisationId),
       organisation => updateState({ organisation }),
-      () => setError(errorMessage)
+      handleError
     )
 
     const membershipsUnsub = onSnapshot(
@@ -56,25 +61,25 @@ export default function OrganisationProvider({ children }: { children: ReactNode
         memberships,
         userMembership: memberships.find(m => m.data().userId === authUserId)
       }),
-      () => setError(errorMessage)
+      handleError
     )
 
     const callsUnsub = onSnapshot(
       query(Collection.Call, where("organisationId", "==", organisationId)),
       ({ docs: calls }) => updateState({ calls }),
-      () => setError(errorMessage)
+      handleError
     )
 
     const invitesUnsub = onSnapshot(
       query(Collection.Invite, where("organisationId", "==", organisationId)),
       ({ docs: invites }) => updateState({ invites }),
-      () => setError(errorMessage)
+      handleError
     )
 
     const connectionsUnsub = onSnapshot(
       query(Collection.OauthConnection, where("organisationId", "==", organisationId)),
       ({ docs: oauthConnections }) => updateState({ oauthConnections }),
-      () => setError(errorMessage)
+      handleError
     )
 
     return () => {

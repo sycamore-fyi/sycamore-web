@@ -2,7 +2,7 @@ import {
   collection, CollectionReference, QueryDocumentSnapshot, DocumentData,
   WithFieldValue, FirestoreDataConverter, SnapshotOptions, Timestamp
 } from "firebase/firestore"
-import { CollectionName, User } from "@sycamore-fyi/shared"
+import { CollectionName, Membership, User } from "@sycamore-fyi/shared"
 import { db } from "./app"
 
 const converter = <T extends { [key: string]: any }>(): FirestoreDataConverter<T> => ({
@@ -26,4 +26,5 @@ function ref<T>(collectionName: CollectionName) {
 
 export const Collection = {
   [CollectionName.USER]: ref<User>(CollectionName.USER),
+  [CollectionName.MEMBERSHIP]: ref<Membership>(CollectionName.MEMBERSHIP),
 }

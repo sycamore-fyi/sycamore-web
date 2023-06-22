@@ -102,12 +102,12 @@ export default function SideBar() {
         Icon={Mic}
         isExpanded={state.isExpanded}
       />
-      <SideBarLink
+      {/* <SideBarLink
         to={`/org/${organisationId}/assistant`}
         title="Assistant"
         Icon={Brain}
         isExpanded={state.isExpanded}
-      />
+      /> */}
       <SideBarLink
         to={`/org/${organisationId}/settings`}
         title="Settings"

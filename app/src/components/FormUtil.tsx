@@ -50,6 +50,7 @@ export function FormUtil<Schema extends ZodTypeAny>({
         description: successMessage
       })
     } catch (err) {
+      console.error(err)
       toast({
         variant: "destructive",
         description: errorMessage(err)

@@ -3,6 +3,7 @@ import { wrapEndpoint } from "../../../../utils/wrapEndpoint";
 import { exchangeAuthCodeForTokens } from "../../../../../../clients/oauth/auth/exchangeAuthCodeForTokens";
 import { Collection } from "../../../../../../clients/firebase/firestore/collection";
 import { OauthIntegration } from "@sycamore-fyi/shared";
+import { oauthParams } from "../../../../../../clients/oauth/auth/oauthParams";
 
 export const post = wrapEndpoint({
   params: z.object({
@@ -17,6 +18,8 @@ export const post = wrapEndpoint({
     body: { code, state: stateId },
     params: { integration },
   } = req;
+
+  const { serviceType } = oauthParams[integration];
 
   const [{ refreshToken }, state] = await Promise.all([
     exchangeAuthCodeForTokens(integration, code),
@@ -34,6 +37,7 @@ export const post = wrapEndpoint({
     createdAt: new Date(),
     organisationId,
     refreshToken,
+    serviceType,
   });
 
   return res.status(200).json({ organisationId });

@@ -12,10 +12,35 @@ interface Props {
   isWithinLimit: boolean,
 }
 
+function formatBytes(bytes: number) {
+  const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+  let unitIndex = 0;
+
+  while (bytes >= 1000 && unitIndex < units.length - 1) {
+    bytes /= 1000;
+    unitIndex++;
+  }
+
+  return {
+    units: units[unitIndex],
+    value: bytes,
+    decimalPlaces: bytes >= 1 && bytes < 10 ? 1 : 0
+  }
+}
+
+function BytesDisplay({ totalBytes, bytesTransferred }: { totalBytes: number, bytesTransferred: number }) {
+  const { units, value: totalValue, decimalPlaces } = formatBytes(totalBytes)
+  const transferredValue = (bytesTransferred / totalBytes) * totalValue
+  return (
+    <p><span className="text-semibold">{transferredValue.toFixed(decimalPlaces)}</span> / {totalValue.toFixed(decimalPlaces)}{units}</p>
+  )
+}
+
 interface Data {
   files?: FileList,
   fileInputKey: string,
-  uploadProgress?: number
+  uploadBytesTransferred?: number,
+  uploadTotalBytes?: number,
 }
 
 enum UploadState {
@@ -68,14 +93,14 @@ export default function FileUploadDialog(props: Props) {
       file,
       props.organisationId,
       props.userId,
-      (progress: number) => {
-        updateState({ uploadProgress: progress });
+      (bytesTransferred: number, totalBytes: number) => {
+        updateState({ uploadBytesTransferred: bytesTransferred, uploadTotalBytes: totalBytes });
       }
     );
   };
 
-  const uploadState = state.uploadProgress
-    ? state.uploadProgress === 1
+  const uploadState = state.uploadBytesTransferred
+    ? state.uploadBytesTransferred === state.uploadTotalBytes
       ? UploadState.COMPLETE
       : UploadState.IN_PROGRESS
     : UploadState.NOT_STARTED
@@ -98,7 +123,8 @@ export default function FileUploadDialog(props: Props) {
       if (!open) {
         updateState({
           files: undefined,
-          uploadProgress: undefined,
+          uploadBytesTransferred: undefined,
+          uploadTotalBytes: undefined,
           fileInputKey: generateFileUploadKey()
         })
       }
@@ -121,7 +147,15 @@ export default function FileUploadDialog(props: Props) {
             disabled={uploadState !== UploadState.NOT_STARTED}
             key={state.fileInputKey}
           />
-          {state.uploadProgress ? <Progress value={state.uploadProgress * 100} /> : null}
+          {
+            state.uploadBytesTransferred && state.uploadTotalBytes
+              ? (
+                <>
+                  <Progress value={(state.uploadBytesTransferred / state.uploadTotalBytes) * 100} />
+                  <BytesDisplay totalBytes={state.uploadTotalBytes} bytesTransferred={state.uploadBytesTransferred} />
+                </>
+              )
+              : null}
         </div>
         <DialogFooter>
           <Button

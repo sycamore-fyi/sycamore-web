@@ -5,25 +5,22 @@ import { FileType } from "./fileTypes/FileType";
 import { handleUploadedCall } from "./fileTypeHandlers/handleUploadedCall";
 import { handleSpeakerSegmentsOrUndiarisedTranscript } from "./fileTypeHandlers/handleSpeakerSegmentsOrUndiarisedTranscript";
 import { wrapFunctionHandler } from "../wrapFunctionHandler";
-// import { handleDiarizedTranscriptSegments } from "./fileTypeHandlers/handleDiarizedTranscriptSegments"
+import { handleDiarizedTranscriptSegments } from "./fileTypeHandlers/handleDiarizedTranscriptSegments";
 // import { handleParaphrasedSpeakerTurns } from "./fileTypeHandlers/handleParaphrasedSpeakerTurns"
 
 const handlers = {
   [FileType.UPLOADED_CALL]: handleUploadedCall,
   [FileType.SPEAKER_SEGMENTS]: handleSpeakerSegmentsOrUndiarisedTranscript,
   [FileType.UNDIARIZED_TRANSCRIPT]: handleSpeakerSegmentsOrUndiarisedTranscript,
-  // [FileType.DIARIZED_TRANSCRIPT_SEGMENTS]: handleDiarizedTranscriptSegments,
+  [FileType.DIARIZED_TRANSCRIPT_SEGMENTS]: handleDiarizedTranscriptSegments,
   // [FileType.PARAPHRASED_SPEAKER_TURNS]: handleParaphrasedSpeakerTurns,
 
 
   [FileType.PROCESSED_CALL]: (event: StorageEvent) => {
-    console.log(event);
-  },
-  [FileType.DIARIZED_TRANSCRIPT_SEGMENTS]: (event: StorageEvent) => {
-    console.log(event);
+    logger.info(event);
   },
   [FileType.PARAPHRASED_SPEAKER_TURNS]: (event: StorageEvent) => {
-    console.log(event);
+    logger.info(event);
   },
 };
 

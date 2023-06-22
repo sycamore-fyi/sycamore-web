@@ -30,6 +30,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     }
 
     onSnapshot(doc(Collection.User, authUserId), async user => {
+      console.log("user data:", user.data()!)
       updateState({
         user,
         isLoading: false

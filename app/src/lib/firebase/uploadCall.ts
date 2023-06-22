@@ -7,7 +7,7 @@ export async function uploadCall(
   organisationId: string,
   userId: string,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onProgress: (progress: number) => void = () => { }
+  onProgress: (bytesTransferred: number, totalBytes: number) => void = () => { }
 ) {
   const callId = uuid()
   const extension = file.name.split(".").pop()
@@ -18,7 +18,7 @@ export async function uploadCall(
     }
   })
 
-  uploadTask.on("state_changed", snapshot => onProgress(snapshot.bytesTransferred / snapshot.totalBytes))
+  uploadTask.on("state_changed", ({ bytesTransferred, totalBytes }) => onProgress(bytesTransferred, totalBytes))
 
   return uploadTask.then
 }

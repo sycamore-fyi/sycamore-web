@@ -4,10 +4,18 @@
   "version": "1.0.0",
   "permissions": [
     "tabs",
-    "activeTab"
+    "activeTab",
+    "storage",
+    "identity"
   ],
   "action": {
     "default_popup": "index.html"
+  },
+  "oauth2": {
+    "client_id": "76556239915-gir8r2khg0vsaa6gbhku528n5vrptthu.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/userinfo.email"
+    ]
   },
   "icons": {
     "16": "images/logo-16.png",

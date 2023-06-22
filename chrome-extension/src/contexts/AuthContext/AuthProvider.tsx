@@ -17,8 +17,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
   console.log("rendering auth provider", state)
 
-  const authUserId = state.authUser?.uid
-
   useEffect(() => onIdTokenChanged(auth, async () => {
     await state.authUser?.getIdTokenResult(true)
   }), [state.authUser])

@@ -1,27 +1,4 @@
 {
-  "indexes": [
-    {
-      "collectionGroup": "DiarizedTranscriptSegment",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "callId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "organisationId",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "startMs",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "__name__",
-          "order": "ASCENDING"
-        }
-      ]
-    }
-  ],
+  "indexes": [],
   "fieldOverrides": []
 }

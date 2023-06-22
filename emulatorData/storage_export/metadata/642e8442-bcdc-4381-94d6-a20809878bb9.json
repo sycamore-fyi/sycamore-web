@@ -1,0 +1,18 @@
+{
+  "name": "2f0e22f1-07ed-4c9c-82ef-2c0f90c653ef/20ded0ca-4741-4e6f-ad9c-c67579a50230/processed_call.mp3",
+  "bucket": "sycamore-staging.appspot.com",
+  "metageneration": 2,
+  "generation": 1687464473807,
+  "contentType": "audio/mpeg",
+  "storageClass": "STANDARD",
+  "cacheControl": "public,max-age=3600000",
+  "downloadTokens": [
+    "571926fe-db40-4748-8709-f833450b65f1"
+  ],
+  "etag": "mlIx8EsgpMmYdu3Ffq7gENAABXI",
+  "timeCreated": "2023-06-22T20:07:53.807Z",
+  "updated": "2023-06-22T20:08:33.267Z",
+  "size": 31529004,
+  "md5Hash": "t3lq5m9k0s5u+Vzsu3KBCg==",
+  "crc32c": "1031509010"
+}

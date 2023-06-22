@@ -137,7 +137,7 @@ export default function CallProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     (async () => {
-      const filePath = state.call?.data()?.processedFilePath
+      const filePath = state.call?.data()?.filePath
 
       if (!filePath) return
 

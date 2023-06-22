@@ -25,21 +25,34 @@ function calculateCallHours(organisationCreatedAt: Date, userId: string, calls: 
 }
 
 async function startPipelineTasks(remoteMp3FilePath: string, organisationId: string, callId: string) {
+  logger.info("starting pipeline tasks", {
+    callId,
+    organisationId,
+  });
+
   let diarizationTaskId: string;
   let transcriptionTaskId: string;
 
   const isProd = getEnvironment() === Environment.PROD;
 
   if (isProd) {
-    const beamClient = beam("api");
+    logger.info("environment is prod, requesting beam webhooks");
+    const beamClient = beam("apps");
     [diarizationTaskId, transcriptionTaskId] = await Promise.all([
       requestWebhookTrigger(beamClient, BeamAppId.DIARIZATION, remoteMp3FilePath),
       requestWebhookTrigger(beamClient, BeamAppId.TRANSCRIPTION, remoteMp3FilePath),
     ]);
+
+    logger.info("webhooks sent");
   } else {
     diarizationTaskId = "a6fc61b5-4798-4af5-b2fe-e2e6172787b6";
     transcriptionTaskId = "0219e883-81a1-4c65-bdbf-bf6becec751a";
   }
+
+  logger.info("creating pipeline tasks", {
+    diarizationTaskId,
+    transcriptionTaskId,
+  });
 
   const basePipelineTaskData = {
     createdAt: new Date(),
@@ -69,7 +82,10 @@ async function startPipelineTasks(remoteMp3FilePath: string, organisationId: str
     }),
   ]);
 
+  logger.info("pipeline tasks created");
+
   if (!isProd) {
+    logger.info("environment is not prod, calling beam webhook manually");
     const callWebhook = async (taskId: string) => axios.post(`${config().SERVER_URL}/webhooks/beam`, {}, {
       headers: {
         "beam-task-id": taskId,
@@ -83,24 +99,12 @@ async function startPipelineTasks(remoteMp3FilePath: string, organisationId: str
   }
 }
 
-async function updateDatabaseCallObject(localMp3FilePath: string, callId: string, processedFilePath: string) {
-  const durationMs = await audioDurationMs(localMp3FilePath);
-
-  await Collection.Call.doc(callId).update({
-    durationMs,
-    processedFilePath,
-    processedAt: new Date(),
-  });
-}
-
 export const handleUploadedCall = async (event: StorageEvent, filePath: string) => {
   logger.info("handling uploaded call", { filePath });
 
   const userId = event.data.metadata?.userId;
 
-  if (!userId) {
-    throw new Error("userId not contained in upload metadata");
-  }
+  if (!userId) throw new Error("userId not contained in upload metadata");
 
   const { organisationId, callId } = parseFilePath(filePath);
 
@@ -111,13 +115,37 @@ export const handleUploadedCall = async (event: StorageEvent, filePath: string) 
   ] = await Promise.all([
     Collection.Organisation.doc(organisationId).get(),
     Collection.Call.where("organisationId", "==", organisationId).where("userId", "==", userId).get(),
+    Collection.Call.doc(callId).create({
+      organisationId,
+      userId,
+      isDiarized: false,
+      isProcessed: false,
+      isRejected: false,
+      isSummarised: false,
+      isTranscribed: false,
+      wereDiarizedSegmentsCreated: false,
+      createdAt: new Date(),
+    }),
   ]);
 
-  const organisationData = organisation.data()!;
-  if (!organisationData) return;
+  async function rejectRecording(rejectionReason: string) {
+    await Promise.all([
+      bucket.file(filePath).delete(),
+      Collection.Call.doc(callId).update({
+        rejectionReason,
+        isRejected: true,
+      }),
+    ]);
+  }
+
+  const organisationData = organisation.data();
+  if (!organisationData) {
+    await rejectRecording("Invalid organisation");
+    return;
+  }
 
   const startOfMonth = calculateCurrentMonthStartDate(organisationData.createdAt);
-  const callsInMonth = calls.map((call) => call.data()!).filter((call) => call.createdAt > startOfMonth);
+  const callsInMonth = calls.map((call) => call.data()).filter((call) => call?.createdAt > startOfMonth);
   const callHours = calculateCallHours(startOfMonth, userId, callsInMonth);
 
   if (callHours > STANDARD_PLAN_TRANSCRIPTION_HOUR_LIMIT) {
@@ -128,44 +156,66 @@ export const handleUploadedCall = async (event: StorageEvent, filePath: string) 
       startOfMonth,
     });
 
-    await bucket.file(filePath).delete();
+    await rejectRecording("You've used up your recording hours.");
     return;
   }
 
-  await Promise.all([
-    Collection.Call.doc(callId).create({
-      organisationId,
-      userId,
-      createdAt: new Date(),
-      uploadedFilePath: filePath,
-    }),
-    downloadToTempDirectory({ filePath }, async (localUploadFilePath: string) => {
-      logger.info("converting file to mp3 into temp directory", {
-        localUploadFilePath,
+  await downloadToTempDirectory({ filePath }, async (localUploadFilePath: string) => {
+    logger.info("converting file to mp3 into temp directory", {
+      localUploadFilePath,
+    });
+
+    const isUploadedFileMp3 = event.data.contentType === "audio/mpeg";
+    const localMp3FilePath = isUploadedFileMp3 ? localUploadFilePath : await convertToMp3(localUploadFilePath);
+    const durationMs = await audioDurationMs(localMp3FilePath);
+    const durationHours = durationMs / (1000 * 60 * 60);
+
+    if ((callHours + durationHours) > STANDARD_PLAN_TRANSCRIPTION_HOUR_LIMIT) {
+      logger.info("user above call limit, returing", {
+        userId,
+        organisationId,
+        callHours,
+        startOfMonth,
       });
 
-      const isUploadedFileMp3 = event.data.contentType === "audio/mpeg";
-      const localMp3FilePath = isUploadedFileMp3 ? localUploadFilePath : await convertToMp3(localUploadFilePath);
+      await rejectRecording("You've used up your recording hours");
+      return;
+    }
 
-      const destinationPath = path.join(
-        path.dirname(filePath),
-        fileNameFromExpectedFileType(FileType.PROCESSED_CALL)
-      );
+    const destinationPath = path.join(
+      path.dirname(filePath),
+      fileNameFromExpectedFileType(FileType.PROCESSED_CALL)
+    );
 
-      logger.info("converted file, uploading to Cloud Storage", {
-        destinationPath,
-      });
+    logger.info("converted file, uploading to Cloud Storage", {
+      destinationPath,
+    });
 
-      await bucket.upload(localMp3FilePath, { destination: destinationPath });
+    await Promise.all([
+      bucket.upload(
+        localMp3FilePath,
+        {
+          destination: destinationPath,
+          metadata: {
+            cacheControl: "public,max-age=3600000",
+          },
+        }
+      ),
+      Collection.Call.doc(callId).update({
+        isProcessed: true,
+        filePath: destinationPath,
+        durationMs,
+      }),
+    ]);
 
-      logger.info("upload successful");
+    logger.info("upload successful");
 
-      await Promise.all([
-        updateDatabaseCallObject(localMp3FilePath, callId, destinationPath),
-        startPipelineTasks(destinationPath, organisationId, callId),
-        bucket.file(filePath).delete(),
-      ]);
-    }),
-  ]);
+    await Promise.all([
+      startPipelineTasks(destinationPath, organisationId, callId),
+      bucket.file(filePath).delete(),
+    ]);
+
+    logger.info("updated db, started pipeline tasks, deleted uploaded file");
+  });
 };
 

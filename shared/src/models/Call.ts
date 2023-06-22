@@ -1,9 +1,20 @@
+export enum CallState {
+  UPLOADED = "UPLOADED",
+}
+
 export interface Call {
   organisationId: string,
   userId: string,
   createdAt: Date,
-  uploadedFilePath: string,
-  processedFilePath?: string,
+  filePath?: string,
   durationMs?: number,
-  processedAt?: Date
+
+  isProcessed: boolean,
+  isDiarized: boolean,
+  isTranscribed: boolean,
+  wereDiarizedSegmentsCreated: boolean,
+  isSummarised: boolean,
+
+  isRejected: boolean,
+  rejectionReason?: string
 }

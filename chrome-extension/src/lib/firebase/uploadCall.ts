@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid"
 import { storage } from "./app"
 
 export async function uploadCall(
-  file: File,
+  file: Blob,
   organisationId: string,
   userId: string,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
