@@ -23,6 +23,8 @@ import { UserGuard } from "./routes/UserGuard.tsx";
 import CompleteProfilePage from "./routes/complete-profile.tsx";
 import AssistantPage from "./routes/org/[organisationId]/assistant/index.tsx";
 import OauthRedirectPage from "./routes/oauth/[integration]/index.tsx";
+import SupportPage from "./routes/support.tsx";
+import ZoomInstructionsPage from "./routes/zoom-instructions.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +40,8 @@ export const router = createBrowserRouter([
       { path: "legal/terms-of-service", element: <TermsOfServicePage /> },
       { path: "oauth/:integration", element: <OauthRedirectPage /> },
       { path: "legal/privacy-policy", element: <PrivacyPolicyPage /> },
+      { path: "support", element: <SupportPage /> },
+      { path: "zoom-instructions", element: <ZoomInstructionsPage /> },
       {
         path: "complete-profile",
         element: (

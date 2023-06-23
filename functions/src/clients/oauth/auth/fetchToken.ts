@@ -30,6 +30,10 @@ export async function fetchToken(
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
+    auth: {
+      username: clientId,
+      password: clientSecret,
+    },
   });
 
   const {

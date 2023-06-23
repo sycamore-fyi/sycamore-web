@@ -1,6 +1,6 @@
 import { onObjectFinalized } from "firebase-functions/v2/storage";
 import { handleObjectFinalized } from "./triggers/storage/handleObjectFinalized";
-import { beamCredentials, hubspotCredentials, openaiCredentials, pineconeCredentials, sendgridCredentials } from "./clients/firebase/secrets";
+import { beamCredentials, hubspotCredentials, openaiCredentials, pineconeCredentials, sendgridCredentials, slackCredentials, zoomCredentials } from "./clients/firebase/secrets";
 import * as functions from "firebase-functions";
 import { handleAuthUserCreated } from "./triggers/auth/handlers/handleAuthUserCreated";
 import { setGlobalOptions } from "firebase-functions/v2";
@@ -15,6 +15,10 @@ import { handlePipelineTaskChange } from "./triggers/firestore/handlers/handlePi
 import { handleUserChange } from "./triggers/firestore/handlers/handleUserChange";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { handleEveryDay } from "./triggers/cron/handleEveryDay";
+import { handleOauthConnectionChange } from "./triggers/firestore/handlers/handleOauthConnectionChange";
+import { handleSlack } from "./triggers/http/slack/handleSlack";
+import { handleInstantMessageChange } from "./triggers/firestore/handlers/handleSlackMessageChange";
+import { handleInstantMessageChannelMembershipChange } from "./triggers/firestore/handlers/handleChannelMembershipChange";
 
 const user = functions.region("europe-west1").auth.user();
 
@@ -23,14 +27,46 @@ setGlobalOptions({
   maxInstances: 10,
 });
 
+const oauthSecrets = [
+  hubspotCredentials.name,
+  zoomCredentials.name,
+];
+
 export const onExternalHttpRequest = onRequest({
   cors: true,
   secrets: [
     openaiCredentials.name,
     sendgridCredentials.name,
-    hubspotCredentials.name,
+    ...oauthSecrets,
   ],
 }, handleHttpRequest);
+
+export const slack = onRequest({
+  cors: true,
+  secrets: [
+    slackCredentials.name,
+    openaiCredentials.name,
+    pineconeCredentials.name,
+  ],
+}, handleSlack);
+
+export const onSlackMessageChange = onDocumentWritten({
+  secrets: [
+    slackCredentials.name,
+    openaiCredentials.name,
+    pineconeCredentials.name,
+  ],
+  document: `${CollectionName.INSTANT_MESSAGE}/{id}`,
+}, handleInstantMessageChange);
+
+export const onChannelMembershipChange = onDocumentWritten({
+  secrets: [
+    slackCredentials.name,
+    openaiCredentials.name,
+    pineconeCredentials.name,
+  ],
+  document: `${CollectionName.INSTANT_MESSAGE_CHANNEL_MEMBERSHIP}/{id}`,
+}, handleInstantMessageChannelMembershipChange);
 
 export const onStorageObjectFinalized = onObjectFinalized({
   secrets: [
@@ -43,6 +79,9 @@ export const onStorageObjectFinalized = onObjectFinalized({
 
 export const onEveryDay = onSchedule({
   schedule: "0 * * * *",
+  secrets: [
+    ...oauthSecrets,
+  ],
 }, handleEveryDay);
 
 export const onPipelineTaskChanged = onDocumentWritten({
@@ -53,6 +92,13 @@ export const onPipelineTaskChanged = onDocumentWritten({
 }, handlePipelineTaskChange);
 
 export const onMembershipChanged = onDocumentWritten(`${CollectionName.MEMBERSHIP}/{id}`, handleMembershipChange);
+export const onOauthConnectionChanged = onDocumentWritten({
+  document: `${CollectionName.OAUTH_CONNECTION}/{id}`,
+  secrets: [
+    ...oauthSecrets,
+  ],
+  timeoutSeconds: 60 * 9,
+}, handleOauthConnectionChange);
 export const onOrganisationChanged = onDocumentWritten(`${CollectionName.ORGANISATION}/{id}`, handleOrganisationChange);
 export const onUserChanged = onDocumentWritten(`${CollectionName.USER}/{id}`, handleUserChange);
 

@@ -6,5 +6,6 @@ export interface OauthConnection {
   integration: OauthIntegration,
   serviceType: OauthServiceType,
   refreshToken: string,
+  metadata?: { [key: string]: any }
   createdAt: Date
 }

@@ -8,6 +8,7 @@ interface VectorConstructor {
   values: number[],
   documentType: PineconeDocumentType,
   organisationId: string,
+  text: string,
   metadata?: { [key: string]: string | number }
   environment?: Environment,
 }
@@ -16,6 +17,7 @@ export function constructVector({
   values,
   documentType,
   organisationId,
+  text,
   metadata = {},
   environment = getEnvironment(),
 }: VectorConstructor): Vector {
@@ -26,6 +28,7 @@ export function constructVector({
       environment,
       documentType,
       organisationId,
+      text,
       ...metadata,
     },
   };

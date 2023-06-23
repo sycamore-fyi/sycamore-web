@@ -5,10 +5,11 @@ import { SyncRequest, syncData } from "../syncData";
 export function syncHubspotData({ accessToken, organisationId, oauthConnectionId }: SyncRequest) {
   return async <T>(
     syncedDataType: SyncedDataType,
-    endpoint: (client: hubspot.Client) => (limit: number, cursor?: string) => Promise<{
-      results: { properties: T; }[];
+    endpoint: (client: hubspot.Client) => (limit: number, cursor?: string, properties?: string[]) => Promise<{
+      results: T[];
       paging?: { next?: { after?: string; }; };
-    }>
+    }>,
+    properties: string[]
   ) => {
     const client = new hubspot.Client({
       accessToken,
@@ -16,8 +17,8 @@ export function syncHubspotData({ accessToken, organisationId, oauthConnectionId
     });
 
     async function fetchFn(cursor?: string) {
-      const res = await endpoint(client)(100, cursor);
-      const data = res.results.map((datum) => datum.properties);
+      const res = await endpoint(client)(100, cursor, properties);
+      const data = res.results;
       const nextCursor = res.paging?.next?.after;
       return { data, cursor: nextCursor };
     }
