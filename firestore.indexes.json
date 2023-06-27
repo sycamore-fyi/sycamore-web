@@ -1,4 +1,59 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "CallSummary",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "callId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "organisationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "ParaphrasedSpeakerTurn",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "callId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "organisationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "turnIndex",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "DiarizedTranscriptSegment",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "callId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "organisationId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "startMs",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

@@ -37,15 +37,15 @@ export const handlePipelineTaskChange = wrapChangeHandler<PipelineTask>({
     logger.info("retrieved task status from beam", taskResponseData);
 
     const pipelineTaskData = afterData;
-    const { endedAt, outputs } = taskResponseData;
-    const isSuccessful = !!endedAt && !!outputs;
+    const { outputs } = taskResponseData;
+    const isSuccessful = !!outputs;
     const pipelineTaskResult = isSuccessful ? PipelineTaskResult.SUCCESS : PipelineTaskResult.FAILURE;
 
     logger.info("updating task result", { pipelineTaskResult });
 
     await Collection.PipelineTask.doc(id).update({ result: pipelineTaskResult });
 
-    if (!endedAt || !outputs) {
+    if (!isSuccessful) {
       logger.info("task isn't finished, returning");
       return;
     }

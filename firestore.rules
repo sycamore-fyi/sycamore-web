@@ -50,6 +50,14 @@ service cloud.firestore {
       allow delete: if isAuthed() && isMember(existingData().organisationId);
     }
 
+    match /ParaphrasedSpeakerTurn/{id} {
+      allow read: if isAuthed() && isMember(existingData().organisationId);
+    }
+
+    match /CallSummary/{id} {
+      allow read: if isAuthed() && isMember(existingData().organisationId);
+    }
+
     match /SpeakerAlias/{id} {
       allow read: if isAuthed() && isMember(existingData().organisationId);
       allow create: if isAuthed() && isMember(incomingData().organisationId);

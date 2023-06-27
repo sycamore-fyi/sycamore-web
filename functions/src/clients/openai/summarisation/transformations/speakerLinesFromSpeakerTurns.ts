@@ -1,9 +1,17 @@
 import { ParsedSpeakerTurn } from "../interfaces/SpeakerTurn";
 
-export function speakerLinesFromSpeakerTurns(speakerTurns: ParsedSpeakerTurn[], showIndex: boolean): string[] {
+export function speakerLinesFromSpeakerTurns(speakerTurns: ParsedSpeakerTurn[], showLabel: boolean, showIndex = true): string[] {
   return speakerTurns.map((turn, index) => {
     const { speakerLabel, speakerIndex } = turn;
-    if (showIndex) return `${index} ${speakerLabel ?? speakerIndex}: ${turn.text}`;
-    return `${speakerLabel ?? speakerIndex}: ${turn.text}`;
+
+    let label = showIndex ? `${index} ` : "";
+
+    if (showLabel) {
+      label += `${speakerLabel ?? "UNKNOWN"}`;
+    }
+
+    label += ` ${speakerIndex}`;
+
+    return `${label}: ${turn.text}`;
   });
 }

@@ -1,49 +1,45 @@
-import { logger } from "firebase-functions/v2";
 import { ParsedSpeakerTurn } from "../interfaces/SpeakerTurn";
 import { enumValues } from "../../../../utils/enumValues";
 import { SpeakerLabel } from "../interfaces/SpeakerLabel";
 import { isNumber } from "../../../../utils/isNumber";
 
 export function parsedSpeakersTurnsFromSpeakerLines(speakerLines: string[]): ParsedSpeakerTurn[] {
-  return speakerLines.map((line) => {
-    const colonDelimiter = ": ";
-    const colonSplit = line.split(colonDelimiter);
+  return speakerLines
+    .map((line) => {
+      const colonDelimiter = ": ";
+      const colonSplit = line.split(colonDelimiter);
 
-    if (colonSplit.length < 2) {
-      logger.info("invalid speaker line, no colon");
-      return {};
-    }
-
-    const [labels] = colonSplit;
-    const text = line.slice(labels.length + colonDelimiter.length);
-
-    const labelSpaceSplit = labels.split(" ");
-
-    let indexString: string | undefined;
-    let labelString: string | undefined;
-
-    switch (labelSpaceSplit.length) {
-      case 0: return {};
-      case 1: {
-        [labelString] = labelSpaceSplit;
-        break;
+      if (colonSplit.length < 2) {
+        return null;
       }
-      case 2: {
-        [indexString, labelString] = labelSpaceSplit;
-        break;
+
+      const [labels] = colonSplit;
+      const text = line.slice(labels.length + colonDelimiter.length);
+
+      const labelSpaceSplit = labels.split(" ");
+
+      let turnIndexStr: string | undefined;
+      let speakerLabelStr: string | undefined;
+      let speakerIndexStr: string | undefined;
+
+      if (labelSpaceSplit.length < 2 || labelSpaceSplit.length > 3) {
+        return null;
+      } else if (labelSpaceSplit.length === 2) {
+        [speakerLabelStr, speakerIndexStr] = labelSpaceSplit;
+      } else if (labelSpaceSplit.length === 3) {
+        [turnIndexStr, speakerLabelStr, speakerIndexStr] = labelSpaceSplit;
       }
-      default: return {};
-    }
 
-    const turnIndex = indexString && isNumber(indexString) ? parseFloat(indexString) : undefined;
-    const speakerLabel = labelString && enumValues(SpeakerLabel).includes(labelString) ? labelString as SpeakerLabel : undefined;
-    const speakerIndex = labelString && isNumber(labelString) ? parseFloat(labelString) : undefined;
+      const turnIndex = turnIndexStr && isNumber(turnIndexStr) ? parseFloat(turnIndexStr) : undefined;
+      const speakerLabel = speakerLabelStr && enumValues(SpeakerLabel).includes(speakerLabelStr) ? speakerLabelStr as SpeakerLabel : undefined;
+      const speakerIndex = speakerIndexStr && isNumber(speakerIndexStr) ? parseFloat(speakerIndexStr) : undefined;
 
-    return {
-      text,
-      speakerIndex,
-      speakerLabel,
-      turnIndex,
-    };
-  });
+      return {
+        text,
+        speakerIndex,
+        speakerLabel,
+        turnIndex,
+      };
+    })
+    .filter((l) => !!l) as ParsedSpeakerTurn[];
 }

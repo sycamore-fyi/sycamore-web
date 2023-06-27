@@ -10,7 +10,6 @@ import UserAvatar from "@/components/layout/UserAvatar"
 import { Call, STANDARD_PLAN_TRANSCRIPTION_HOUR_LIMIT, calculateCurrentMonthStartDate } from "@sycamore-fyi/shared"
 import { Progress } from "@/components/ui/progress"
 import { Loader2 } from "lucide-react"
-import { DocumentSnapshot } from "firebase/firestore"
 
 function calculateCallHours(organisationCreatedAt: Date, userId: string, calls: Call[]) {
   const startOfMonth = calculateCurrentMonthStartDate(organisationCreatedAt)

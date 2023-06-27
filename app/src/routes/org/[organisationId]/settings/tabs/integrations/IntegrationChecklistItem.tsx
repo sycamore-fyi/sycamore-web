@@ -8,11 +8,23 @@ import { ConnectIntegrationRow } from "./ConnectIntegrationRow";
 import { ConnectionRow } from "./ConnectionRow";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { toHeaderCase, toTextCase } from "js-convert-case";
 
 const integrationChecklistData = {
   [OauthServiceType.CRM]: {
-    body: "Connect your CRM to sync your calls and meetings to Sycamore. You'll then be able to select which calls you want analysed.",
+    title: "CRM",
+    body: "Connect your CRM (Salesforce, Hubspot etc) to sync your calls and meetings to Sycamore. You'll then be able to select which calls you want analysed.",
     integrations: [OauthIntegration.HUBSPOT, OauthIntegration.SALESFORCE]
+  },
+  [OauthServiceType.INSTANT_MESSAGE_TOOL]: {
+    title: "Instant messaging",
+    body: "Connect your instant messaging tool (Slack, Microsoft Teams etc) to send conversations with clients in shared channels to Sycamore. You'll be able to analyse the feedback you're getting by instant message from clients.",
+    integrations: [OauthIntegration.SLACK],
+  },
+  [OauthServiceType.MEETING_TOOL]: {
+    title: "Web conferencing",
+    body: "Connect your web conferencing tool (Zoom, Google Meet etc) to sync meeting recordings with Sycamore. You'll then be able to select the recordings you want transcribed and analysed.",
+    integrations: [OauthIntegration.ZOOM]
   }
 }
 
@@ -20,14 +32,13 @@ export function IntegrationChecklistItem({ serviceType, connections, isAdmin }: 
   const filteredConnections = connections.filter(c => c.data()?.serviceType === serviceType);
   const existingIntegrations = filteredConnections.map(c => c.data()?.integration).filter(i => !!i) as OauthIntegration[];
   const isComplete = filteredConnections.length > 0;
-  const { body, integrations } = integrationChecklistData[serviceType];
+  const { title, body, integrations } = integrationChecklistData[serviceType];
   return <Card
     key={serviceType}
     className=""
   >
-
     <CardHeader>
-      <CardTitle>{serviceType}</CardTitle>
+      <CardTitle>{title}</CardTitle>
       <CardDescription>{body}</CardDescription>
     </CardHeader>
     <CardContent className="space-y-4">
@@ -57,7 +68,7 @@ export function IntegrationChecklistItem({ serviceType, connections, isAdmin }: 
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Connect your {serviceType}</DialogTitle>
+            <DialogTitle>Connect your {toTextCase(title)} tool</DialogTitle>
             <DialogDescription>{body}</DialogDescription>
           </DialogHeader>
           <div>

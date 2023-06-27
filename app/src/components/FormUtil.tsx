@@ -7,6 +7,7 @@ import { ReactNode } from "react";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { ZodTypeAny, z } from "zod";
 import { useToast } from "@/components/ui/use-toast";
+import { useSubmitProps } from "@/hooks/useClickProps";
 
 export interface FormUtilProps<Schema extends ZodTypeAny> {
   schema: Schema,
@@ -36,6 +37,7 @@ export function FormUtil<Schema extends ZodTypeAny>({
     resolver: zodResolver(schema),
     defaultValues,
   });
+  const submitProps = useSubmitProps()
 
   const { toast } = useToast()
 
@@ -62,9 +64,11 @@ export function FormUtil<Schema extends ZodTypeAny>({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmitWrapper)} className={cn("space-y-4 max-w-[480px]", className)}>
         {render(form)}
-        <Button className="w-full" type="submit" disabled={disabled}>
-          {form.formState.isSubmitting ? <Loader2 color="white" className="animate-spin" /> : submitTitle}
-        </Button>
+        <Button
+          {...submitProps({ isLoading: form.formState.isSubmitting, buttonText: submitTitle })}
+          className="w-full"
+          disabled={disabled}
+        />
       </form>
     </Form>
   );

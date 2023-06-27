@@ -7,7 +7,7 @@ import { oauthParams } from "../../../../../../clients/oauth/auth/oauthParams";
 
 export const post = wrapEndpoint({
   params: z.object({
-    integration: z.enum([OauthIntegration.HUBSPOT]),
+    integration: z.nativeEnum(OauthIntegration),
   }),
   body: z.object({
     code: z.string().nonempty(),

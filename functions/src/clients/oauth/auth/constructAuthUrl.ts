@@ -5,13 +5,12 @@ import { oauthParams } from "./oauthParams";
 import { redirectUri } from "./redirectUri";
 
 export function constructAuthUrl(integration: OauthIntegration, state: string) {
-  const { authUrl, scopes, secret, additionalParams } = oauthParams[integration];
+  const { authUrl, scopes, secret, additionalParams, fieldNameOverrides } = oauthParams[integration];
   const { clientId } = getCredentials<OauthCredentials>(secret);
   const url = new URL(authUrl);
   url.searchParams.append("client_id", clientId);
-  url.searchParams.append("response_type", "code");
   if (scopes) {
-    url.searchParams.append("scopes", scopes.join(" "));
+    url.searchParams.append(fieldNameOverrides?.scopes ?? "scopes", scopes.join(" "));
   }
 
   if (additionalParams) {

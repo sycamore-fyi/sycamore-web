@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react"
-import { DiarizedTranscriptSegment, Call, SpeakerAlias } from "@sycamore-fyi/shared"
+import { DiarizedTranscriptSegment, Call, SpeakerAlias, ParaphrasedSpeakerTurn, CallSummary } from "@sycamore-fyi/shared"
 import { DocumentSnapshot } from "firebase/firestore"
 import { callActions } from "./callActions"
 import { SpeakerTurn } from "./CallProvider"
@@ -10,6 +10,8 @@ export interface CallContextState {
   diarizedSegments?: DocumentSnapshot<DiarizedTranscriptSegment>[] | null,
   speakerAliases?: DocumentSnapshot<SpeakerAlias>[] | null,
   speakerTurns?: SpeakerTurn[],
+  paraphrasedSpeakerTurns?: DocumentSnapshot<ParaphrasedSpeakerTurn>[] | null,
+  callSummary?: CallSummary | null,
   audio?: HTMLAudioElement
 }
 

@@ -1,5 +1,4 @@
 import { createContext, useContext } from "react"
-import { userActions } from "./userActions"
 import { User } from "@sycamore-fyi/shared"
 import { DocumentSnapshot } from "firebase/firestore"
 
@@ -8,9 +7,13 @@ export interface UserContextState {
   user?: DocumentSnapshot<User> | null,
 }
 
+export interface UserContextActions {
+  update?: (data: Partial<User>) => Promise<void>
+}
+
 export interface UserContextProps {
   state: UserContextState,
-  actions: typeof userActions
+  actions: UserContextActions
 }
 
 export const initialUserState: UserContextState = {
@@ -19,7 +22,7 @@ export const initialUserState: UserContextState = {
 
 export const UserContext = createContext<UserContextProps>({
   state: initialUserState,
-  actions: userActions
+  actions: {}
 })
 
 export const useUser = () => useContext(UserContext)

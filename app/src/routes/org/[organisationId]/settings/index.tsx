@@ -31,10 +31,10 @@ export default function SettingsPage() {
         className="w-full space-y-8"
         defaultValue="details"
       >
-        <TabsList className="w-full grid grid-cols-4">
+        <TabsList className="w-full grid grid-cols-3">
           <TabsTrigger value="details">Details</TabsTrigger>
           <TabsTrigger value="team">Team</TabsTrigger>
-          <TabsTrigger value="integrations">Integrations</TabsTrigger>
+          {/* <TabsTrigger value="integrations">Integrations</TabsTrigger> */}
           <TabsTrigger value="billing">Billing</TabsTrigger>
         </TabsList>
         <DetailsTab organisation={organisation} isAdmin={isAdmin} />
@@ -45,7 +45,7 @@ export default function SettingsPage() {
           pendingInvites={pendingInvites}
           userId={userId}
         />
-        <IntegrationsTab connections={oauthConnections} isAdmin={isAdmin} />
+        {/* <IntegrationsTab connections={oauthConnections} isAdmin={isAdmin} /> */}
         <BillingTab />
       </Tabs>
     </Container>

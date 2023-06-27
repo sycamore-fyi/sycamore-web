@@ -1,7 +1,7 @@
 import { OauthIntegration } from "@sycamore-fyi/shared";
 import { Collection } from "../../../../clients/firebase/firestore/collection";
 
-export async function organisationIdFromTeam(team: string) {
+export async function connectionFromTeam(team: string) {
   const { docs: connections } = await Collection.OauthConnection
     .where("integration", "==", OauthIntegration.SLACK)
     .where("metadata.slack.team", "==", team)
@@ -13,7 +13,5 @@ export async function organisationIdFromTeam(team: string) {
 
   if (!connectionData) return;
 
-  const { organisationId } = connectionData;
-
-  return organisationId;
+  return { id: connections[0].id, data: connectionData };
 }

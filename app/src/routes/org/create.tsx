@@ -6,9 +6,11 @@ import Container from "@/components/layout/Container"
 import BackLink from "../../components/layout/BackLink"
 import { organisationSchema } from "@/schemas/organisationSchema"
 import { FormFieldUtil } from "@/components/FormFieldUtil"
+import { useMemberships } from "@/contexts/MembershipsContext/MembershipsContext"
 
 export default function CreateOrganisationPage() {
   const navigate = useNavigate()
+  const { actions: { create } } = useMemberships()
 
   return (
     <Container className="space-y-8 py-12">
@@ -20,8 +22,8 @@ export default function CreateOrganisationPage() {
         submitTitle="Create organisation"
         successMessage="Organisation created successfully"
         onSubmit={async (data) => {
-          const res = await postServer("/organisations", data)
-          const { organisationId } = res.data
+          if (!create) return
+          const { organisationId } = await create(data)
           navigate(`/org/${organisationId}`)
         }}
         render={form => (

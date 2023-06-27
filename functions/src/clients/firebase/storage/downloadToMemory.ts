@@ -1,6 +1,6 @@
 import { DownloadRequest } from "./DownloadRequest";
 import { fileFromDownloadRequest } from "./fileFromDownloadRequest";
-import { ZodTypeAny } from "zod";
+import { ZodType } from "zod";
 
 export async function downloadBuffer(downloadRequest: DownloadRequest) {
   const file = fileFromDownloadRequest(downloadRequest);
@@ -13,13 +13,8 @@ export async function downloadString(downloadRequest: DownloadRequest) {
   return buffer.toString();
 }
 
-export async function downloadJson<T extends ZodTypeAny>(downloadRequest: DownloadRequest, schema: T) {
+export async function downloadJson<Data>(downloadRequest: DownloadRequest, schema: ZodType<Data>) {
   const jsonString = await downloadString(downloadRequest);
   const data = JSON.parse(jsonString);
-
-  if (schema) {
-    return schema.parse(data);
-  } else {
-    return data;
-  }
+  return schema.parse(data);
 }

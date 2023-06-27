@@ -1,7 +1,6 @@
 import { createContext, useContext } from "react"
-import { Invite, Membership, Organisation, Call, OauthConnection } from "@sycamore-fyi/shared"
+import { Invite, Membership, Organisation, Call, OauthConnection, OrganisationRole } from "@sycamore-fyi/shared"
 import { DocumentSnapshot } from "firebase/firestore"
-import { organisationActions } from "./organisationActions"
 
 export interface OrganisationContextState {
   isLoading: boolean,
@@ -13,9 +12,18 @@ export interface OrganisationContextState {
   calls?: DocumentSnapshot<Call>[] | null,
 }
 
+export interface OrganisationContextActions {
+  leave?: () => Promise<void>,
+  deleteOrg?: () => Promise<void>,
+  sendInvites?: () => Promise<void>,
+  cancelInvite?: (inviteId: string) => Promise<void>,
+  removeMember?: (membershipId: string) => Promise<void>,
+  changeMemberRole?: (membershipId: string, role: OrganisationRole) => Promise<void>,
+}
+
 export interface OrganisationContextProps {
   state: OrganisationContextState,
-  actions: typeof organisationActions
+  actions: OrganisationContextActions
 }
 
 export const initialOrganisationState: OrganisationContextState = {
@@ -24,7 +32,7 @@ export const initialOrganisationState: OrganisationContextState = {
 
 export const OrganisationContext = createContext<OrganisationContextProps>({
   state: initialOrganisationState,
-  actions: organisationActions
+  actions: {}
 })
 
 export const useOrganisation = () => useContext(OrganisationContext)

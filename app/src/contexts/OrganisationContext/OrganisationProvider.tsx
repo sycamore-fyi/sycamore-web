@@ -5,10 +5,9 @@ import {
   useState
 } from "react";
 import { useUpdateState } from "../../hooks/useUpdateState";
-import { doc, onSnapshot, query, where } from "firebase/firestore";
+import { deleteDoc, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { Collection } from "@/lib/firebase/Collection";
-import { OrganisationContext, OrganisationContextState, initialOrganisationState } from "./OrganisationContext";
-import { organisationActions } from "./organisationActions";
+import { OrganisationContext, OrganisationContextProps, OrganisationContextState, initialOrganisationState } from "./OrganisationContext";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../AuthContext/AuthContext";
 import { setGroup } from "@amplitude/analytics-browser";
@@ -39,6 +38,7 @@ export default function OrganisationProvider({ children }: { children: ReactNode
       isLoading: !!organisationId && !!authUserId,
       organisation: null,
       memberships: null,
+      userMembership: null,
       invites: null,
       calls: null
     })
@@ -105,9 +105,35 @@ export default function OrganisationProvider({ children }: { children: ReactNode
     setGroup("organisationId", realOrgId ?? "null")
   }, [realOrgId])
 
-  const value = useMemo(() => ({
+  const value: OrganisationContextProps = useMemo(() => ({
     state,
-    actions: organisationActions
+    actions: {
+      async leave() {
+        const membershipRef = state.userMembership?.ref
+        if (!membershipRef) return
+        return deleteDoc(membershipRef)
+      },
+      async deleteOrg() {
+        const orgRef = state.organisation?.ref
+        if (!orgRef) return
+        return deleteDoc(orgRef)
+      },
+      async cancelInvite(inviteId) {
+        return updateDoc(
+          doc(Collection.Invite, inviteId),
+          { isCancelled: true }
+        )
+      },
+      async removeMember(membershipId) {
+        return deleteDoc(doc(Collection.Membership, membershipId))
+      },
+      async changeMemberRole(membershipId, role) {
+        return updateDoc(
+          doc(Collection.Membership, membershipId),
+          { role }
+        )
+      }
+    }
   }), [state])
 
   if (error) return <p>{error}</p>

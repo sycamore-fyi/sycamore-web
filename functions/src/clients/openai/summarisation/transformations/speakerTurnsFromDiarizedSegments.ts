@@ -5,7 +5,7 @@ import { SpeakerTurn } from "../interfaces/SpeakerTurn";
 
 export function speakerTurnsFromDiarizedSegments(
   segments: (DiarizedTranscriptSegment | SpeakerLabelledTranscriptSegment)[]
-): SpeakerTurn[] {
+) {
   return segments.reduce<SpeakerTurn[]>((turns, segment) => {
     const { speakerIndex, text, endMs } = segment;
     const lastTurn = last(turns);

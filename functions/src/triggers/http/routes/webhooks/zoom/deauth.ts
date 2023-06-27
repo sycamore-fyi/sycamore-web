@@ -1,8 +1,5 @@
 import { z } from "zod";
 import { wrapEndpoint } from "../../../utils/wrapEndpoint";
-import { Collection } from "../../../../../clients/firebase/firestore/collection";
-import { OauthIntegration } from "@sycamore-fyi/shared";
-import { deleteAll, deleteBatchDatum, writeBatch } from "../../../../../clients/firebase/firestore/writeBatch";
 import { getCredentials, zoomCredentials } from "../../../../../clients/firebase/secrets";
 import { Request } from "express";
 import * as crypto from "crypto";

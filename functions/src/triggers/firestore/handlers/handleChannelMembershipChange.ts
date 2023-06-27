@@ -7,8 +7,9 @@ import { Collection } from "../../../clients/firebase/firestore/collection";
 
 async function saveMessagesRecursively(channelMembership: InstantMessageChannelMembership, cursor?: string) {
   const { source, organisationId, channelId } = channelMembership;
+  const slackClient = await slack(organisationId);
 
-  const { messages: firstMessages, response_metadata: responseMetadata } = await slack().conversations.history({
+  const { messages: firstMessages, response_metadata: responseMetadata } = await slackClient.conversations.history({
     channel: channelId,
     limit: 200,
     cursor,
@@ -26,7 +27,7 @@ async function saveMessagesRecursively(channelMembership: InstantMessageChannelM
 
     if (message.reply_count === 0 || !message.ts) continue;
 
-    const { messages: replyMessages } = await slack().conversations.replies({
+    const { messages: replyMessages } = await slackClient.conversations.replies({
       channel: channelId,
       ts: message.ts,
       limit: 200,

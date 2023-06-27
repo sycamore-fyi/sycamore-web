@@ -6,7 +6,7 @@
     "build": "tsc",
     "postbuild": "copyfiles -u 1 src/**/*.handlebars src/**/*.json src/**/*.png build/",
     "build:watch": "tsc --watch",
-    "dev": "firebase emulators:start --only firestore,functions,auth,storage --import ../emulatorData",
+    "dev": "firebase use staging && firebase emulators:start --only firestore,functions,auth,storage --import ../emulatorData",
     "install-shared": "npm un sycamore-fyi-shared && npm i ./sycamore-fyi-shared-1.0.0.tgz",
     "deploy:staging": "firebase use staging && firebase deploy --only functions,firestore,storage",
     "deploy:prod": "firebase use prod && firebase deploy --only functions,firestore,storage"
@@ -21,6 +21,7 @@
     "@pinecone-database/pinecone": "^0.1.6",
     "@sendgrid/mail": "^7.7.0",
     "@slack/bolt": "^3.13.1",
+    "@slack/web-api": "^6.8.1",
     "@sycamore-fyi/shared": "file:sycamore-fyi-shared-1.0.0.tgz",
     "@types/stripe-v3": "^3.1.28",
     "adm-zip": "^0.5.10",

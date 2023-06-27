@@ -1,5 +1,5 @@
 import { SecretParam } from "firebase-functions/lib/params/types";
-import { hubspotCredentials, zoomCredentials } from "../../firebase/secrets";
+import { hubspotCredentials, slackCredentials, zoomCredentials } from "../../firebase/secrets";
 import { OauthIntegration, OauthServiceType } from "@sycamore-fyi/shared";
 
 export interface OauthParams {
@@ -8,7 +8,10 @@ export interface OauthParams {
   authUrl: string,
   tokensUrl: string,
   serviceType: OauthServiceType,
-  additionalParams?: Record<string, string>
+  additionalParams?: Record<string, string>,
+  fieldNameOverrides?: {
+    scopes?: string
+  }
 }
 
 export const oauthParams: {
@@ -40,9 +43,28 @@ export const oauthParams: {
     secret: zoomCredentials,
     authUrl: "https://zoom.us/oauth/authorize",
     tokensUrl: "https://zoom.us/oauth/token",
-    serviceType: OauthServiceType.CALLS,
+    serviceType: OauthServiceType.MEETING_TOOL,
     additionalParams: {
       response_type: "code",
+    },
+  },
+  [OauthIntegration.SLACK]: {
+    secret: slackCredentials,
+    authUrl: "https://slack.com/oauth/v2/authorize",
+    scopes: [
+      "channels:history",
+      "channels:join",
+      "channels:read",
+      "groups:history",
+      "groups:read",
+      "im:history",
+      "mpim:history",
+      "mpim:read",
+    ],
+    tokensUrl: "https://slack.com/api/oauth.v2.access",
+    serviceType: OauthServiceType.INSTANT_MESSAGE_TOOL,
+    fieldNameOverrides: {
+      scopes: "scope",
     },
   },
 };

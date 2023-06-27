@@ -1,7 +1,7 @@
 import { SlackEventMiddlewareArgs } from "@slack/bolt";
 import { logger } from "firebase-functions/v2";
 import { Collection } from "../../../../clients/firebase/firestore/collection";
-import { organisationIdFromTeam } from "../utils/organisationIdFromTeamId";
+import { connectionFromTeam } from "../utils/organisationIdFromTeamId";
 import { InstantMessageSource } from "@sycamore-fyi/shared";
 
 export const handleMessage = async ({ message, body }: SlackEventMiddlewareArgs<"message">) => {
@@ -41,9 +41,9 @@ export const handleMessage = async ({ message, body }: SlackEventMiddlewareArgs<
 
   if (!shouldMessageBeSaved) return;
 
-  const organisationId = await organisationIdFromTeam(team);
-
-  if (!organisationId) return;
+  const connection = await connectionFromTeam(team);
+  if (!connection) return;
+  const { data: { organisationId } } = connection;
 
   await Collection.InstantMessage.add({
     text: message.text!,

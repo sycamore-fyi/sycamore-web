@@ -7,8 +7,6 @@ import { FileType } from "./FileType";
 export function getFileType(filePath: string, contentType?: string): FileType {
   logger.info("determining file type", { filePath, contentType });
 
-  if (!contentType) throw new Error("file has no content type");
-
   const fileName = path.basename(filePath);
   const fileExtension = path.extname(filePath).toLowerCase().replace(".", "");
   const filenameWithoutExtension = path.parse(filePath).name;
@@ -20,7 +18,6 @@ export function getFileType(filePath: string, contentType?: string): FileType {
   });
 
   const expectedFileDatum = expectedFileData.find((datum) => (
-    datum.contentType === contentType &&
     datum.fileName === fileName
   ));
 

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "firebase use staging && vite",
     "build": "tsc && vite build",
     "deploy:staging": "firebase use staging && vite build --mode staging && firebase deploy --only hosting",
     "deploy:prod": "firebase use prod && vite build --mode prod && firebase deploy --only hosting",
@@ -57,6 +57,7 @@
     "react-day-picker": "^8.7.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
+    "react-markdown": "^8.0.7",
     "react-router-dom": "^6.11.2",
     "smartlook-client": "^8.1.0",
     "tailwind-merge": "^1.13.0",

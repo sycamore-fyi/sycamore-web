@@ -1,0 +1,398 @@
+[
+  {
+    "text": "Hey Ed, how are you doing?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 0
+  },
+  {
+    "text": "Hey Mark, I'm good, how about you?",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 1
+  },
+  {
+    "text": "Yeah, good. It's been a while since we last saw each other, right? I think it's been two years since I left Sopa.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 2
+  },
+  {
+    "text": "Yeah, it's been a couple of years. That's around the time I left too. How have you been?",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 3
+  },
+  {
+    "text": "Really good. I tried starting my own business and now I'm back in a fintech company, but this time in the B2B sector. It's challenging but interesting.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 4
+  },
+  {
+    "text": "Where are you working now?",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 5
+  },
+  {
+    "text": "It's called Moneycast, a 10-person startup in the management intelligence space. We aggregate insights from different SaaS tools.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 6
+  },
+  {
+    "text": "Okay, I see. How do you find working in a smaller company compared to a bigger one?",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 7
+  },
+  {
+    "text": "It's been a challenge for me, but it's good for my development. In a smaller company, there's more emphasis on customer insight and data. At Sopa, we had tons of customer data to optimize things, but with a new product, it's about understanding the customer qualitatively. That's what I've been improving on.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 8
+  },
+  {
+    "text": "I was just talking to a friend who has a startup idea. We discussed how to validate it on a small scale and how having a large customer base makes a difference in getting feedback.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 9
+  },
+  {
+    "text": "That's exactly why I wanted to talk to you. I'm trying to validate if other PMs or customer-facing roles have the same problem as me. I've been doing these calls with other people, like Mark Sard and Alistair from Sopa.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 10
+  },
+  {
+    "text": "I've seen Alistair recently. Haven't seen Mark in years. How's he doing at Revolut?",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 11
+  },
+  {
+    "text": "He's doing well. He's at Revolut, working on Heather Products. He talked about it and it seemed interesting. By the way, can I record this call to take notes later?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 12
+  },
+  {
+    "text": "Sure, no problem. Go ahead and record it. ",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 13
+  },
+  {
+    "text": "Great. I'll start the recording. So, to begin, I'd like to know what products you oversee and your main goals at Monza.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 14
+  },
+  {
+    "text": "I lead a group of squads covering loans, overdrafts, home ownership, and business borrowing. We just launched a mortgage tracking tool in the Monza app, and we have aspirations to develop more in that space. For business borrowing, we're bringing loan and overdraft products to our business customers in different markets.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 15
+  },
+  {
+    "text": "I see. As a PM, what are the main aspects of your role? How do you split your time between customer interviews, data analysis, and general management?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 16
+  },
+  {
+    "text": "At Monza, PMs have a more strategic role. We have a strong team with an engineering manager, designer, user researcher, and tech lead. This allows me to focus more on product strategy and answering important questions. We have a culture of first principles thinking, where we write detailed documents based on research, data, and industry insights. I spend a lot of time with stakeholders and vary my focus based on what's needed the most, whether it's working with designers, researchers, engineers, or the roadmap. Compared to Zopa, I spend more time thinking strategically and less time on day-to-day tasks.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 17
+  },
+  {
+    "text": "I see. So, you don't directly conduct user research?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 18
+  },
+  {
+    "text": "No, we have dedicated user researchers. I work with them to plan the research based on the hypotheses we need to test. They handle participant recruitment, run the calls, and do the research synthesis. It's a partnership, but the researcher leads the actual research.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 19
+  },
+  {
+    "text": "I understand. Apart from identifying problems in the data, how important is user research for stakeholder management and understanding new user problems?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 20
+  },
+  {
+    "text": "User research is important for stakeholder management and pushing back on features. It also helps us uncover new user problems that may not be related to a specific feature.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 21
+  },
+  {
+    "text": "Got it. What other types of research do the user researchers do, aside from interviews?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 24
+  },
+  {
+    "text": "They can do various types of qualitative research, like surveys and social listening. Usability testing is something we often do ourselves.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 25
+  },
+  {
+    "text": "You mentioned social listening. Is that monitoring Monzo's social media engagement?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 26
+  },
+  {
+    "text": "No, it involves going into forums and Facebook groups to understand how people talk about money problems and their attitudes.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 27
+  },
+  {
+    "text": "",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 28
+  },
+  {
+    "text": "We used platforms like Mumsnet and Money Saving Expert to find relevant topics and understand common mental models people have when discussing debts.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 29
+  },
+  {
+    "text": "How useful was social listening for you?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 30
+  },
+  {
+    "text": "It was super useful for understanding mental models and sentiment. It helped us frame our product and understand use cases.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 31
+  },
+  {
+    "text": "That makes sense. Was it a lot of work?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 32
+  },
+  {
+    "text": "It was quite a lot of work, but it's not something we do often. Most of our research involves concept testing, usability testing, and foundational interviews.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 33
+  },
+  {
+    "text": "Have you talked to customer support at all?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 34
+  },
+  {
+    "text": "We have ways of getting feedback from customer support, but it's hard to filter out the noise. I usually go and ask specific questions instead of relying on customer support insights.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 35
+  },
+  {
+    "text": "Yeah.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 36
+  },
+  {
+    "text": "It depends on the question I want to ask. We have a lot of customer feedback, so it's important to consider the maturity of our products when choosing a source of insight.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 37
+  },
+  {
+    "text": "Yeah.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 38
+  },
+  {
+    "text": "That makes sense. Is it easy to keep track of customer comments?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 40
+  },
+  {
+    "text": "The feedback volume for the home ownership product is manageable. If it becomes too overwhelming, we might switch to a monthly feedback summary or stop looking at it regularly. As a product manager, I need to be strategic about when to spend time on insight. I prefer to focus on specific questions rather than asking people what they want to tell me.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 41
+  },
+  {
+    "text": "That makes sense. Have you experienced recency bias when analyzing customer feedback?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 42
+  },
+  {
+    "text": "Yes, definitely. We try to combat recency bias by working from first principles and written proposals. We also have forums like product review where decisions are challenged. Recency bias exists, but we have ways to address it. We are all fallible humans.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 43
+  },
+  {
+    "text": "How do you prove the value of qualitative data to stakeholders?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 44
+  },
+  {
+    "text": "I don't rely solely on qualitative data. For example, when we launched a mortgage visibility feature, we received feedback about incorrect numbers and overpayments. We quantitatively analyzed the feedback and applied judgment to prioritize trustworthiness over nice-to-have features. It's about the narrative and principles guiding our decision-making.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 45
+  },
+  {
+    "text": "That makes sense. What parts of the research process do user researchers handle?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 46
+  },
+  {
+    "text": "User researchers handle most of the research process, with support from a research ops team. As a product manager, I work with the user researcher at the beginning and end of the process. I ensure that the research is set up correctly and review the synthesis of findings.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 47
+  },
+  {
+    "text": "How is the synthesis presented at the end? Is it useful for you?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 50
+  },
+  {
+    "text": "We use Notion as a wiki to present the synthesis. It's a report that includes verbatim quotes and sometimes clips. It starts with key takeaways and then provides a detailed analysis of the interviews. We highlight important insights and identify pain points. The report is also summarized in Slack for centralized access to research across the company.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 51
+  },
+  {
+    "text": "That makes sense. Do you filter out less significant findings and focus on important themes?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 52
+  },
+  {
+    "text": "We don't exactly filter out findings, but we consider the certainty of each finding. If only one person mentioned something, it's not considered a finding. If a few people mention it without contradiction, it's still uncertain. The findings are qualified based on certainty.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 53
+  },
+  {
+    "text": "Do you use any tools for user insight?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 54
+  },
+  {
+    "text": "What specific tools are you referring to?",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 55
+  },
+  {
+    "text": "Let me explain my idea. In some companies, there's a lot of insight coming from customer-facing roles like sales, customer success, and customer service. I want to create a shared repository to bridge these teams and include user interviews, sales calls, and operational insights. Automatic transcription and AI synthesis would help with the time-consuming process of synthesizing the data.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 56
+  },
+  {
+    "text": "That sounds useful, especially for companies without full-time researchers. It can help them go from zero to some research. Monzo, on the other hand, has always valued and invested in research. We have dedicated researchers per squad or a few squads. They are busy, so delivering differentiated value requires a higher bar to clear.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 57
+  },
+  {
+    "text": "I agree with you.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 58
+  },
+  {
+    "text": "Currently, my company doesn't benefit from user insight or research regularly, but your idea seems valuable.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 59
+  },
+  {
+    "text": "I completely agree. Your setup with a specialized team makes it easier for you to conduct research without time constraints.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 60
+  },
+  {
+    "text": "Yes, for you, it's important to identify companies that would benefit from better research but are currently not investing in it.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 61
+  },
+  {
+    "text": "That makes sense. Do you have any other advice for me?",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 62
+  },
+  {
+    "text": "Not really. You're approaching it the right way. Just be mindful of the difference between B2B and B2C and choose one to focus on initially.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 63
+  },
+  {
+    "text": "That's one of the decisions I need to make quickly.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 64
+  },
+  {
+    "text": "B2C involves a higher volume of customer data, while B2B has lower volume but richer data. The solution will differ based on the type of business. ",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 65
+  },
+  {
+    "text": "I've noticed that B2B is more receptive to research than B2C, which is interesting and makes sense.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 66
+  },
+  {
+    "text": "It was great talking to you too. Let me know if you can think of anyone else who might be interested in discussing this. You mentioned your friend, but anyone else would be helpful too.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 68
+  },
+  {
+    "text": "I'll think about it. I think my friend could be worth talking to, but he's busy applying for other jobs. I'll let you know. Thanks.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 69
+  },
+  {
+    "text": "Alright, I'll let you get on with your call. It was great talking to you. Take care.",
+    "speakerIndex": 0,
+    "speakerLabel": "Q",
+    "turnIndex": 70
+  },
+  {
+    "text": "Good to see you, Matt. Thanks. Bye.",
+    "speakerIndex": 1,
+    "speakerLabel": "A",
+    "turnIndex": 71
+  }
+]

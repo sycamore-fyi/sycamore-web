@@ -3,6 +3,7 @@ import { deleteAll } from "../../../clients/firebase/firestore/writeBatch";
 import { Organisation } from "@sycamore-fyi/shared";
 import { wrapChangeHandler } from "../utils/wrapChangeHandler";
 import { updateByQuery } from "../utils/updateByQuery";
+import { bucket } from "../../../clients/firebase/admin";
 
 export const handleOrganisationChange = wrapChangeHandler<Organisation>({
   async onUpdate(beforeData, afterData, id) {
@@ -21,6 +22,9 @@ export const handleOrganisationChange = wrapChangeHandler<Organisation>({
       Collection.Call,
     ].map((c) => c.where("organisationId", "==", id));
 
-    await deleteAll(queries);
+    await Promise.all([
+      deleteAll(queries),
+      bucket.deleteFiles({ prefix: id }),
+    ]);
   },
 });

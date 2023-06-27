@@ -11,6 +11,14 @@
   color: black;
 }
 
+div.markdown>ul {
+  margin-bottom: 32px;
+}
+
+div.markdown>h2 {
+  margin-bottom: 16px;
+}
+
 html,
 body,
 #root {

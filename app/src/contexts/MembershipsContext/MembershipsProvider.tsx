@@ -6,9 +6,9 @@ import {
 import { useUpdateState } from "../../hooks/useUpdateState";
 import { onSnapshot, query, where } from "firebase/firestore";
 import { Collection } from "@/lib/firebase/Collection";
-import { MembershipsContext, MembershipsContextState, initialMembershipsState } from "./MembershipsContext";
-import { membershipsActions } from "./membershipsActions";
+import { MembershipsContext, MembershipsContextProps, MembershipsContextState, initialMembershipsState } from "./MembershipsContext";
 import { useAuth } from "../AuthContext/AuthContext";
+import { postServer } from "@/lib/callServer";
 
 export default function MembershipsProvider({ children }: { children: ReactNode }) {
   const { state: { authUser } } = useAuth()
@@ -34,9 +34,15 @@ export default function MembershipsProvider({ children }: { children: ReactNode 
     )
   }, [updateState, authUserId])
 
-  const value = useMemo(() => ({
+  const value: MembershipsContextProps = useMemo(() => ({
     state,
-    actions: membershipsActions
+    actions: {
+      async create(data) {
+        const res = await postServer("/organisations", data)
+        const { organisationId } = res.data
+        return { organisationId }
+      },
+    }
   }), [state])
 
   return (

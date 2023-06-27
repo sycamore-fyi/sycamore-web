@@ -1,6 +1,6 @@
 import { CollectionReference, FirestoreDataConverter, DocumentData, QueryDocumentSnapshot, Timestamp } from "firebase-admin/firestore";
 import { db } from "../admin";
-import { User, Organisation, Membership, Invite, Call, PipelineTask, CollectionName, DiarizedTranscriptSegment, OauthConnection, DataExtraction, SyncedData, OauthState, InstantMessage, InstantMessageChannel, InstantMessageChannelMembership } from "@sycamore-fyi/shared";
+import { User, Organisation, Membership, Invite, Call, PipelineTask, CollectionName, DiarizedTranscriptSegment, OauthConnection, DataExtraction, SyncedData, OauthState, InstantMessage, InstantMessageChannel, InstantMessageChannelMembership, ParaphrasedSpeakerTurn, CallSummary } from "@sycamore-fyi/shared";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const converter = <T extends { [key: string]: any }>(): FirestoreDataConverter<T> => ({
@@ -29,7 +29,9 @@ export const Collection = {
   [CollectionName.MEMBERSHIP]: ref<Membership>(CollectionName.MEMBERSHIP),
   [CollectionName.INVITE]: ref<Invite>(CollectionName.INVITE),
   [CollectionName.CALL]: ref<Call>(CollectionName.CALL),
+  [CollectionName.CALL_SUMMARY]: ref<CallSummary>(CollectionName.CALL_SUMMARY),
   [CollectionName.PIPELINE_TASK]: ref<PipelineTask>(CollectionName.PIPELINE_TASK),
+  [CollectionName.PARAPHRASED_SPEAKER_TURN]: ref<ParaphrasedSpeakerTurn>(CollectionName.PARAPHRASED_SPEAKER_TURN),
   [CollectionName.OAUTH_CONNECTION]: ref<OauthConnection>(CollectionName.OAUTH_CONNECTION),
   [CollectionName.DATA_EXTRACTION]: ref<DataExtraction>(CollectionName.DATA_EXTRACTION),
   [CollectionName.SYNCED_DATA]: ref<SyncedData>(CollectionName.SYNCED_DATA),

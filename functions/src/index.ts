@@ -30,6 +30,7 @@ setGlobalOptions({
 const oauthSecrets = [
   hubspotCredentials.name,
   zoomCredentials.name,
+  slackCredentials.name,
 ];
 
 export const onExternalHttpRequest = onRequest({
@@ -73,6 +74,7 @@ export const onStorageObjectFinalized = onObjectFinalized({
     openaiCredentials.name,
     beamCredentials.name,
     pineconeCredentials.name,
+    sendgridCredentials.name,
   ],
   timeoutSeconds: 60 * 9,
 }, handleObjectFinalized);

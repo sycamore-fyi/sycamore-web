@@ -5,7 +5,7 @@ import {
   useState
 } from "react";
 import { useUpdateState } from "../../hooks/useUpdateState";
-import { doc, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { doc, limit, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { Collection } from "@/lib/firebase/Collection";
 import { CallContext, CallContextState, initialCallState } from "./CallContext";
 import { callActions } from "./callActions";
@@ -85,7 +85,10 @@ export default function CallProvider({ children }: { children: ReactNode }) {
       call: null,
       diarizedSegments: null,
       speakerAliases: null,
-      speakerTurns: undefined
+      speakerTurns: undefined,
+      paraphrasedSpeakerTurns: null,
+      callSummary: null,
+      audio: undefined
     })
 
     if (!callId || !authUserId) {
@@ -121,12 +124,45 @@ export default function CallProvider({ children }: { children: ReactNode }) {
 
     onSnapshot(
       query(
+        Collection.ParaphrasedSpeakerTurn,
+        where("callId", "==", callId),
+        where("organisationId", "==", organisationId),
+        orderBy("turnIndex", "asc"),
+      ),
+      ({ docs: speakerTurns }) => updateState({
+        paraphrasedSpeakerTurns: speakerTurns
+      }),
+      (err) => {
+        console.error(err)
+        setError(errorMessage)
+      }
+    )
+
+    onSnapshot(
+      query(
         Collection.SpeakerAlias,
         where("callId", "==", callId),
         where("organisationId", "==", organisationId),
       ),
       ({ docs: speakerAliases }) => updateState({
         speakerAliases
+      }),
+      (err) => {
+        console.error(err)
+        setError(errorMessage)
+      }
+    )
+
+    onSnapshot(
+      query(
+        Collection.CallSummary,
+        where("callId", "==", callId),
+        where("organisationId", "==", organisationId),
+        orderBy("createdAt", "desc"),
+        limit(1),
+      ),
+      ({ docs: callSummaries }) => updateState({
+        callSummary: callSummaries?.length > 0 ? callSummaries[0].data() : null
       }),
       (err) => {
         console.error(err)

@@ -4,10 +4,9 @@ import {
   useMemo
 } from "react";
 import { useUpdateState } from "../../hooks/useUpdateState";
-import { UserContext, UserContextState, initialUserState } from "./UserContext";
-import { userActions } from "./userActions";
+import { UserContext, UserContextProps, UserContextState, initialUserState } from "./UserContext";
 import { useAuth } from "../AuthContext/AuthContext";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { Collection } from "@/lib/firebase/Collection";
 
 export default function UserProvider({ children }: { children: ReactNode }) {
@@ -30,7 +29,6 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     }
 
     onSnapshot(doc(Collection.User, authUserId), async user => {
-      console.log("user data:", user.data()!)
       updateState({
         user,
         isLoading: false
@@ -38,9 +36,18 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     })
   }, [updateState, authUserId, isAuthLoading])
 
-  const value = useMemo(() => ({
+  const value: UserContextProps = useMemo(() => ({
     state,
-    actions: userActions
+    actions: {
+      async update(data) {
+        const userId = state.user?.id
+        if (!userId) return
+        return updateDoc(
+          doc(Collection.User, userId),
+          data
+        )
+      },
+    }
   }), [state])
 
   return (

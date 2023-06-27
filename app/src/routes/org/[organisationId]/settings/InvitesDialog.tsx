@@ -13,18 +13,20 @@ import { SelectGroup } from "@/components/ui/select";
 import { SelectContent } from "@/components/ui/select";
 import { SelectLabel } from "@/components/ui/select";
 import { SelectItem } from "@/components/ui/select";
-import { Plus, X } from "lucide-react";
+import { Loader2, Plus, X } from "lucide-react";
 import { postServer } from "@/lib/callServer";
 import { useState } from "react";
+import { useSubmitProps } from "@/hooks/useClickProps";
 
 export function InvitesDialog(props: { organisationId: string, maxInvites?: number }) {
+  const submitProps = useSubmitProps()
   const strongMaxInvites = props.maxInvites ?? 10
   const [open, setOpen] = useState(false)
   const form = useForm({
     resolver: zodResolver(z.object({
       invites: z.array(
         z.object({
-          role: z.enum([OrganisationRole.ADMIN, OrganisationRole.MEMBER]),
+          role: z.nativeEnum(OrganisationRole),
           email: z.string().email()
         })
       )
@@ -117,12 +119,14 @@ export function InvitesDialog(props: { organisationId: string, maxInvites?: numb
                   <Plus size={16} />
                 </Button>
               )
-              : null}
+              : null
+            }
+            <Button
+              {...submitProps({ isLoading: form.formState.isSubmitting, buttonText: "Invite users" })}
+              className="w-full"
+            />
           </form>
         </Form>
-        <DialogFooter>
-          <Button type="submit" form="invite-users">Invite users</Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

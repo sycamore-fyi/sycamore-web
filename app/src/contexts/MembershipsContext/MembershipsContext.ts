@@ -1,16 +1,19 @@
 import { createContext, useContext } from "react"
 import { Membership } from "@sycamore-fyi/shared"
 import { DocumentSnapshot } from "firebase/firestore"
-import { membershipsActions } from "./membershipsActions"
 
 export interface MembershipsContextState {
   isLoading: boolean,
   memberships?: DocumentSnapshot<Membership>[] | null
 }
 
+export interface MembershipsContextActions {
+  create?: (data: { name: string }) => Promise<{ organisationId: string }>
+}
+
 export interface MembershipsContextProps {
   state: MembershipsContextState,
-  actions: typeof membershipsActions
+  actions: MembershipsContextActions
 }
 
 export const initialMembershipsState: MembershipsContextState = {
@@ -19,7 +22,7 @@ export const initialMembershipsState: MembershipsContextState = {
 
 export const MembershipsContext = createContext<MembershipsContextProps>({
   state: initialMembershipsState,
-  actions: membershipsActions
+  actions: {}
 })
 
 export const useMemberships = () => useContext(MembershipsContext)

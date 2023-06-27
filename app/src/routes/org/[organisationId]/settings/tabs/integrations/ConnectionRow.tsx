@@ -1,27 +1,30 @@
 import { DocumentSnapshot, deleteDoc } from "firebase/firestore";
 import { OauthConnection } from "@sycamore-fyi/shared";
 import { Button } from "@/components/ui/button";
-import { Loader2, MoreHorizontal, Trash } from "lucide-react";
+import { MoreHorizontal, Trash } from "lucide-react";
 import { format } from "date-fns";
 import { toHeaderCase } from "js-convert-case";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useUpdateState } from "@/hooks/useUpdateState";
 import { logoUrlFromIntegration } from "./logoUrlFromIntegration";
+import { useClickProps } from "@/hooks/useClickProps";
 
 export function ConnectionRow({ connection, isAdmin }: { connection: DocumentSnapshot<OauthConnection>; isAdmin: boolean; }) {
   const { integration, createdAt } = connection.data()!;
 
   const [state, updateState] = useUpdateState({
-    isDeletingConnection: false,
     open: false
   });
 
   const handleDeleteConnection = async () => {
-    updateState({ isDeletingConnection: true })
     await deleteDoc(connection.ref)
-    updateState({ open: false })
   }
+
+  const clickProps = useClickProps({
+    onClick: handleDeleteConnection,
+    buttonText: "Delete"
+  })
 
   return (
     <div key={integration} className="flex items-center gap-4">
@@ -53,25 +56,11 @@ export function ConnectionRow({ connection, isAdmin }: { connection: DocumentSna
                 <AlertDialogDescription>Deleting this integration will also delete all data associated with it. This action isn't reversible</AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                {state.isDeletingConnection
-                  ? (
-                    <Button disabled className="flex gap-2">
-                      <Loader2 color="white" className="animate-spin" />
-                      Deleting connection
-                    </Button>
-                  )
-                  : (
-                    <>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        className="bg-red-500"
-                        onClick={handleDeleteConnection}
-                      >
-                        Delete
-                      </AlertDialogAction>
-                    </>
-                  )}
-
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-red-500"
+                  {...clickProps}
+                />
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>

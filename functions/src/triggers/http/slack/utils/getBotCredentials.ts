@@ -1,21 +1,15 @@
-import { slack } from "../../../../clients/slack";
-import { AsyncCache } from "../../../../utils/AsyncCache";
-
-const botCredentialsCache = new AsyncCache(
-  () => slack().auth.test(),
-  1000 * 60 * 60 * 24
-);
+import { WebClient } from "@slack/web-api";
 
 export interface BotCredentials {
   botId: string,
   botUserId: string,
 }
 
-export async function getBotCredentials(): Promise<BotCredentials> {
+export async function getBotCredentials(slackClient: WebClient): Promise<BotCredentials> {
   const {
     bot_id: botId,
     user_id: botUserId,
-  } = await botCredentialsCache.retrieveValue();
+  } = await slackClient.auth.test();
 
   return {
     botId: botId!,

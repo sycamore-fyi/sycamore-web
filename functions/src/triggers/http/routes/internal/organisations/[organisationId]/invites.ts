@@ -61,7 +61,7 @@ export const post = wrapEndpoint({
   body: z.object({
     inviteItems: z.array(
       z.object({
-        role: z.enum([OrganisationRole.ADMIN, OrganisationRole.MEMBER]),
+        role: z.nativeEnum(OrganisationRole),
         email: z.string().email(),
       })
     ),

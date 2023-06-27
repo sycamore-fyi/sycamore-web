@@ -6,7 +6,7 @@ import { Collection } from "../../../../../../clients/firebase/firestore/collect
 
 export const post = wrapEndpoint({
   params: z.object({
-    integration: z.enum([OauthIntegration.HUBSPOT]),
+    integration: z.nativeEnum(OauthIntegration),
   }),
   body: z.object({
     organisationId: z.string().nonempty(),
