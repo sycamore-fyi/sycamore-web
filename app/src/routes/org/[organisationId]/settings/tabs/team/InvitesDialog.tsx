@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -13,24 +13,31 @@ import { SelectGroup } from "@/components/ui/select";
 import { SelectContent } from "@/components/ui/select";
 import { SelectLabel } from "@/components/ui/select";
 import { SelectItem } from "@/components/ui/select";
-import { Loader2, Plus, X } from "lucide-react";
-import { postServer } from "@/lib/callServer";
+import { Plus, X } from "lucide-react";
 import { useState } from "react";
 import { useSubmitProps } from "@/hooks/useClickProps";
+import { useOrganisation } from "@/contexts/OrganisationContext/OrganisationContext";
+
+const inviteItemSchema = z.object({
+  role: z.nativeEnum(OrganisationRole),
+  email: z.string().email()
+})
+
+const createInvitesSchema = z.object({
+  invites: z.array(
+    inviteItemSchema
+  )
+})
+
+export type CreateInvite = z.infer<typeof createInvitesSchema>
 
 export function InvitesDialog(props: { organisationId: string, maxInvites?: number }) {
+  const { actions: { sendInvites } } = useOrganisation()
   const submitProps = useSubmitProps()
   const strongMaxInvites = props.maxInvites ?? 10
   const [open, setOpen] = useState(false)
   const form = useForm({
-    resolver: zodResolver(z.object({
-      invites: z.array(
-        z.object({
-          role: z.nativeEnum(OrganisationRole),
-          email: z.string().email()
-        })
-      )
-    })),
+    resolver: zodResolver(createInvitesSchema),
     defaultValues: {
       invites: [{
         role: OrganisationRole.ADMIN,
@@ -74,10 +81,8 @@ export function InvitesDialog(props: { organisationId: string, maxInvites?: numb
         <Form {...form}>
           <form
             id="invite-users"
-            onSubmit={form.handleSubmit(async ({ invites }) => {
-              await postServer(`/organisations/${props.organisationId}/invites`, {
-                inviteItems: invites
-              });
+            onSubmit={form.handleSubmit(async (data) => {
+              await sendInvites?.(data)
               setOpen(false)
             })}
             className="max-w-[480px] space-y-4"

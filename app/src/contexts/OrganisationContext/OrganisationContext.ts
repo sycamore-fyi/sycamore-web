@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react"
 import { Invite, Membership, Organisation, Call, OauthConnection, OrganisationRole } from "@sycamore-fyi/shared"
 import { DocumentSnapshot } from "firebase/firestore"
+import { CreateInvite } from "@/routes/org/[organisationId]/settings/tabs/team/InvitesDialog"
 
 export interface OrganisationContextState {
   isLoading: boolean,
@@ -15,7 +16,7 @@ export interface OrganisationContextState {
 export interface OrganisationContextActions {
   leave?: () => Promise<void>,
   deleteOrg?: () => Promise<void>,
-  sendInvites?: () => Promise<void>,
+  sendInvites?: (data: CreateInvite) => Promise<void>,
   cancelInvite?: (inviteId: string) => Promise<void>,
   removeMember?: (membershipId: string) => Promise<void>,
   changeMemberRole?: (membershipId: string, role: OrganisationRole) => Promise<void>,

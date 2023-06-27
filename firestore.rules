@@ -31,6 +31,7 @@ service cloud.firestore {
 
     match /Invite/{id} {
       allow read: if isAuthed() && isMember(existingData().organisationId);
+      allow update: if isAuthed() && isAdmin(existingData().organisationId) && hasOnlyChangedKeys(["isCancelled"]);
     }
 
     match /OauthConnection/{id} {

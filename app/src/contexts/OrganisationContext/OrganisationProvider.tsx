@@ -11,6 +11,7 @@ import { OrganisationContext, OrganisationContextProps, OrganisationContextState
 import { useParams } from "react-router-dom";
 import { useAuth } from "../AuthContext/AuthContext";
 import { setGroup } from "@amplitude/analytics-browser";
+import { postServer } from "@/lib/callServer";
 
 export default function OrganisationProvider({ children }: { children: ReactNode }) {
   const { organisationId } = useParams()
@@ -117,6 +118,11 @@ export default function OrganisationProvider({ children }: { children: ReactNode
         const orgRef = state.organisation?.ref
         if (!orgRef) return
         return deleteDoc(orgRef)
+      },
+      async sendInvites({ invites }) {
+        await postServer(`/organisations/${organisationId}/invites`, {
+          inviteItems: invites
+        });
       },
       async cancelInvite(inviteId) {
         return updateDoc(

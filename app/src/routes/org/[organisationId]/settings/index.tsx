@@ -6,7 +6,7 @@ import { OrganisationRole } from "@sycamore-fyi/shared"
 import { useAuth } from "@/contexts/AuthContext/AuthContext"
 import { DetailsTab } from "./tabs/DetailsTab"
 import { BillingTab } from "./tabs/BillingTab"
-import { TeamTab } from "./tabs/TeamTab"
+import { TeamTab } from "./tabs/team/TeamTab"
 import { IntegrationsTab } from "./tabs/integrations/IntegrationsTab"
 
 export default function SettingsPage() {

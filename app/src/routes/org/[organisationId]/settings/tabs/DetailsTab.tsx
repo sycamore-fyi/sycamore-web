@@ -1,7 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { TabsContent } from "@/components/ui/tabs";
 import { FormUtil } from "@/components/FormUtil";
-import { DocumentSnapshot, deleteDoc, updateDoc } from "firebase/firestore";
+import { DocumentSnapshot, updateDoc } from "firebase/firestore";
 import { z } from "zod";
 import { FormFieldUtil } from "@/components/FormFieldUtil";
 import { Organisation } from "@sycamore-fyi/shared";
@@ -16,24 +16,26 @@ interface Props {
   organisation: DocumentSnapshot<Organisation>
 }
 
-export type Promisify<T extends (...args: any[]) => any> =
-  T extends (...args: infer A) => infer R ? (...args: A) => Promise<R> : never;
-
-
-
+export type Promisify<T extends (...args: any[]) => any> = T extends (...args: infer A) => infer R ? (...args: A) => Promise<R> : never;
 
 export function DetailsTab({ isAdmin, organisation }: Props) {
   const orgData = organisation.data()!;
-  const { actions: { deleteOrg } } = useOrganisation();
+  const { actions: { deleteOrg, leave } } = useOrganisation();
   const navigate = useNavigate()
 
-  const handleDeleteOrganisation = async () => {
-    await deleteOrg?.()
-    navigate("/org")
-  }
+  const deleteClickProps = useClickProps({
+    async onClick() {
+      await deleteOrg?.()
+      navigate("/org")
+    },
+    buttonText: "Delete"
+  })
 
-  const clickProps = useClickProps({
-    onClick: handleDeleteOrganisation,
+  const leaveClickProps = useClickProps({
+    async onClick() {
+      await leave?.()
+      navigate("/org")
+    },
     buttonText: "Delete"
   })
 
@@ -63,27 +65,50 @@ export function DetailsTab({ isAdmin, organisation }: Props) {
           )} />
       </div>
 
-      {
-        isAdmin
-          ? (
-            <AlertDialog>
-              <AlertDialogTrigger>
-                <Button variant="destructive">Delete organisation</Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>If you delete your organisation, all your team members will lose access to Sycamore, and all your recordings will be lost. This action is not reversible.</AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction {...clickProps} className="bg-red-500 hover:bg-red-400" />
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )
-          : null
-      }
+      <div className="p-6 border-red-200 border-2 border-dashed rounded-2xl space-y-4 max-w-lg">
+        <h3>Danger zone</h3>
+        <div className="flex gap-4">
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button className="block" variant="destructive">Leave organisation</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>If you leave the organisation, you'll lose access and need an admin to add you back.</AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction {...deleteClickProps} className="bg-red-500 hover:bg-red-400" />
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          {
+            isAdmin
+              ? (
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button className="block" variant="destructive">Delete organisation</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                      <AlertDialogDescription>If you delete your organisation, all your team members will lose access to Sycamore, and all your recordings will be lost. This action is not reversible.</AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction {...deleteClickProps} className="bg-red-500 hover:bg-red-400" />
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )
+              : null
+          }
+        </div>
+      </div>
+
+
     </TabsContent>
   );
 }
