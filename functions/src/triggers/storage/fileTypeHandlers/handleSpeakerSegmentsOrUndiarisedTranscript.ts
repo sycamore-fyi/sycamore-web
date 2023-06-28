@@ -14,9 +14,6 @@ import { CreateTranscriptionResponse } from "../../../clients/openai/actions/tra
 import { createBatchDatum, writeBatch } from "../../../clients/firebase/firestore/writeBatch";
 import { Collection } from "../../../clients/firebase/firestore/collection";
 import { parseFilePath } from "../parseFilePath";
-import { sendEmail } from "../../../clients/sendgrid/sendEmail";
-import { TemplateName } from "../../../clients/sendgrid/TemplateName";
-import { config } from "../../../config";
 
 export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: StorageEvent, filePath: string) => {
   logger.info("handling speaker segments or undiarized transcript", { filePath });
@@ -68,10 +65,6 @@ export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: Storage
     transcriptSegmentsFromOpenaiResponse(undiarizedTranscript)
   );
 
-  const call = await Collection.Call.doc(callId).get();
-  const user = await Collection.User.doc(call.data()!.userId).get();
-  const { email, name } = user.data()!;
-
   await Promise.all([
     saveObjectToStorage(
       filePath,
@@ -87,12 +80,5 @@ export const handleSpeakerSegmentsOrUndiarisedTranscript = async (event: Storage
       }
     ))),
     callRef.update({ wereDiarizedSegmentsCreated: true }),
-    sendEmail(TemplateName.CALL_PROCESSED)([{
-      toEmail: email!,
-      data: {
-        addressee: name!,
-        callLink: `${config().CLIENT_URL}/org/${organisationId}/calls/${callId}`,
-      },
-    }]),
   ]);
 };
