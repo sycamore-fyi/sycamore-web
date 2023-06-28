@@ -9,12 +9,13 @@ import { getEnvironment } from "../../../clients/firebase/Environment";
 import { Environment } from "@sycamore-fyi/shared";
 import * as fs from "fs";
 import * as path from "path";
+import { SpeakerLabel } from "../../../clients/openai/summarisation/interfaces/SpeakerLabel";
 
 const paraphrasedSchema = z.array(
   z.object({
     text: z.string(),
     speakerIndex: z.number().int().gte(0),
-    speakerLabel: z.enum(["Q", "A"]),
+    speakerLabel: z.nativeEnum(SpeakerLabel),
     turnIndex: z.number().int().gte(0),
   })
 );

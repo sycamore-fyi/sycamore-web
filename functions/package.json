@@ -4,7 +4,7 @@
     "lint": "eslint --ext .js,.ts . --fix",
     "prebuild": "rm -rf build",
     "build": "tsc",
-    "postbuild": "copyfiles -u 1 src/**/*.handlebars src/**/*.json src/**/*.png build/",
+    "postbuild": "copyfiles -u 1 src/**/*.handlebars src/**/*.json src/**/*.png src/**/*.md build/",
     "build:watch": "tsc --watch",
     "dev": "firebase use staging && firebase emulators:start --only firestore,functions,auth,storage --import ../emulatorData",
     "install-shared": "npm un sycamore-fyi-shared && npm i ./sycamore-fyi-shared-1.0.0.tgz",

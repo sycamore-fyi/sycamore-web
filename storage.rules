@@ -5,26 +5,6 @@ service firebase.storage {
     function userId() { return request.auth.uid }
     function membershipPath(orgId) { return /databases/(default)/documents/Membership/$(orgId + ":" + userId()) }
     function isMember(orgId) { return firestore.exists(membershipPath(orgId)) }
-    function isValidUploadType() {
-      return request.resource.contentType in [
-        "video/mp4",
-        "video/quicktime",
-        "video/x-msvideo",
-        "video/x-flv",
-        "video/x-ms-wmv",
-        "video/webm",
-        "video/mpeg",
-        "video/x-matroska",
-        "audio/mpeg",
-        "audio/wav",
-        "audio/aac",
-        "audio/flac",
-        "audio/ogg",
-        "audio/opus",
-        "audio/aiff",
-        "audio/mp4"
-      ]
-    }
 
     function isReasonableSize() {
       return request.resource.size < 5 * 1024 * 1024 * 1024 
@@ -35,7 +15,6 @@ service firebase.storage {
       allow create: if (
         isAuthed() &&
         isMember(orgId) &&
-        isValidUploadType() &&
         isReasonableSize() &&
         filename.matches("uploaded_call.*") &&
         request.resource.metadata.userId == userId()

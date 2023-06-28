@@ -17,6 +17,7 @@ import { beam } from "../../../clients/beam/beam";
 import { getEnvironment } from "../../../clients/firebase/Environment";
 import axios from "axios";
 import { config } from "../../../config";
+import { sleep } from "../../../utils/sleep";
 
 function calculateCallHours(organisationCreatedAt: Date, userId: string, calls: Call[]) {
   const startOfMonth = calculateCurrentMonthStartDate(organisationCreatedAt);
@@ -92,6 +93,8 @@ async function startPipelineTasks(remoteMp3FilePath: string, organisationId: str
       },
     });
 
+    await sleep(5000);
+
     await Promise.all([
       callWebhook(diarizationTaskId),
       callWebhook(transcriptionTaskId),
@@ -166,9 +169,27 @@ export const handleUploadedCall = async (event: StorageEvent, filePath: string) 
     });
 
     const isUploadedFileMp3 = event.data.contentType === "audio/mpeg";
-    const localMp3FilePath = isUploadedFileMp3 ? localUploadFilePath : await convertToMp3(localUploadFilePath);
+    let localMp3FilePath: string;
+
+    if (isUploadedFileMp3) {
+      localMp3FilePath = localUploadFilePath;
+    } else {
+      try {
+        localMp3FilePath = await convertToMp3(localUploadFilePath);
+      } catch (err) {
+        await rejectRecording(`We don't support ${path.extname(filePath)} files. Please convert the file to an accepted format (such as .mp3) and try again.`);
+        return;
+      }
+    }
+
     const durationMs = await audioDurationMs(localMp3FilePath);
-    const durationHours = durationMs / (1000 * 60 * 60);
+    const oneHourInMs = 1000 * 60 * 60;
+
+    if (durationMs > oneHourInMs) {
+      await rejectRecording("Calls must be an hour or less");
+      return;
+    }
+    const durationHours = durationMs / oneHourInMs;
 
     if ((callHours + durationHours) > STANDARD_PLAN_TRANSCRIPTION_HOUR_LIMIT) {
       logger.info("user above call limit, returing", {

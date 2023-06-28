@@ -77,6 +77,8 @@ export const onStorageObjectFinalized = onObjectFinalized({
     sendgridCredentials.name,
   ],
   timeoutSeconds: 60 * 9,
+  memory: "8GiB",
+  cpu: 2,
 }, handleObjectFinalized);
 
 export const onEveryDay = onSchedule({

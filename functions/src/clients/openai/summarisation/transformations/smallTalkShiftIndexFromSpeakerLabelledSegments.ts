@@ -12,7 +12,7 @@ export async function smallTalkShiftIndexFromSpeakerLabelledSegments(
   const speakerLines = speakerLinesFromSpeakerTurns(speakerTurns, true);
   const transcriptExcerpt = speakerLines.slice(0, 50).join("\n");
   const prompt = shiftOutOfSmallTalkPrompt(transcriptExcerpt);
-  const index = await chatSimple({ prompt, schema: z.number().int().positive() });
+  const index = await chatSimple({ prompt, schema: z.number().int().gte(0) });
 
   return index;
 }

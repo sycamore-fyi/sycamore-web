@@ -1,6 +1,5 @@
 import { logger } from "firebase-functions/v2";
 import * as path from "path";
-import supportedCallUploadFileFormatData from "./supportedCallUploadFileFormatData";
 import { expectedFileData } from "./expectedFileData";
 import { FileType } from "./FileType";
 
@@ -22,10 +21,8 @@ export function getFileType(filePath: string, contentType?: string): FileType {
   ));
 
   if (expectedFileDatum) return expectedFileDatum.fileType;
-
-  const isUploadedFileInAcceptedFormat = !!supportedCallUploadFileFormatData.find((datum) => datum.contentType === contentType);
-
-  if (isUploadedFileInAcceptedFormat && filenameWithoutExtension === "uploaded_call") return FileType.UPLOADED_CALL;
+  console.log(filenameWithoutExtension);
+  if (filenameWithoutExtension === "uploaded_call") return FileType.UPLOADED_CALL;
 
   throw new Error("invalid combination of filename and content type");
 }
