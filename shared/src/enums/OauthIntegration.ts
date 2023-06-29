@@ -2,5 +2,6 @@ export enum OauthIntegration {
   HUBSPOT = "hubspot",
   SALESFORCE = "salesforce",
   ZOOM = "zoom",
-  SLACK = "slack"
+  SLACK = "slack",
+  GOOGLE_CALENDAR = "google-calendar"
 }

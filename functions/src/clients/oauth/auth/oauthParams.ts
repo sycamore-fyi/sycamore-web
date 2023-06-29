@@ -1,5 +1,5 @@
 import { SecretParam } from "firebase-functions/lib/params/types";
-import { hubspotCredentials, slackCredentials, zoomCredentials } from "../../firebase/secrets";
+import { googleWorkspaceCredentials, hubspotCredentials, slackCredentials, zoomCredentials } from "../../firebase/secrets";
 import { OauthIntegration, OauthServiceType } from "@sycamore-fyi/shared";
 
 export interface OauthParams {
@@ -63,6 +63,21 @@ export const oauthParams: {
     ],
     tokensUrl: "https://slack.com/api/oauth.v2.access",
     serviceType: OauthServiceType.INSTANT_MESSAGE_TOOL,
+    fieldNameOverrides: {
+      scopes: "scope",
+    },
+  },
+  [OauthIntegration.GOOGLE_CALENDAR]: {
+    secret: googleWorkspaceCredentials,
+    authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+    tokensUrl: "https://oauth2.googleapis.com/token",
+    serviceType: OauthServiceType.CALENDAR,
+    scopes: [
+      ".../auth/calendar.events.readonly",
+    ],
+    additionalParams: {
+      access_type: "offline",
+    },
     fieldNameOverrides: {
       scopes: "scope",
     },

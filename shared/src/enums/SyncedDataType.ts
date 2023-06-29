@@ -1,4 +1,5 @@
 export enum SyncedDataType {
   CALL = "CALL",
-  MEETING = "MEETING"
+  MEETING = "MEETING",
+  CALENDAR_MEETING = "CALENDAR_MEETING"
 }

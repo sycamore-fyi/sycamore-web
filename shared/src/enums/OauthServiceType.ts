@@ -1,5 +1,6 @@
 export enum OauthServiceType {
   CRM = "CRM",
+  CALENDAR = "CALENDAR",
   MEETING_TOOL = "MEETING_TOOL",
   INSTANT_MESSAGE_TOOL = "INSTANT_MESSAGE_TOOL"
 }

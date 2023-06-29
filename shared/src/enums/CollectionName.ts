@@ -1,5 +1,6 @@
 export enum CollectionName {
   DIARIZED_TRANSCRIPT_SEGMENT = "DiarizedTranscriptSegment",
+  CALENDAR_MEETING = "CalendarMeeting",
   USER = "User",
   ORGANISATION = "Organisation",
   MEMBERSHIP = "Membership",

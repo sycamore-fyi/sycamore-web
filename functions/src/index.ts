@@ -1,6 +1,6 @@
 import { onObjectFinalized } from "firebase-functions/v2/storage";
 import { handleObjectFinalized } from "./triggers/storage/handleObjectFinalized";
-import { beamCredentials, hubspotCredentials, openaiCredentials, pineconeCredentials, sendgridCredentials, slackCredentials, zoomCredentials } from "./clients/firebase/secrets";
+import { beamCredentials, googleWorkspaceCredentials, hubspotCredentials, openaiCredentials, pineconeCredentials, sendgridCredentials, slackCredentials, zoomCredentials } from "./clients/firebase/secrets";
 import * as functions from "firebase-functions";
 import { handleAuthUserCreated } from "./triggers/auth/handlers/handleAuthUserCreated";
 import { setGlobalOptions } from "firebase-functions/v2";
@@ -31,6 +31,7 @@ const oauthSecrets = [
   hubspotCredentials.name,
   zoomCredentials.name,
   slackCredentials.name,
+  googleWorkspaceCredentials.name,
 ];
 
 export const onExternalHttpRequest = onRequest({
